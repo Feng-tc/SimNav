@@ -1,0 +1,1389 @@
+-- Using CATKIN_DEVEL_PREFIX: /workspace/devel
+-- Using CMAKE_PREFIX_PATH: /workspace/devel;/opt/ros/noetic
+-- This workspace overlays: /workspace/devel;/opt/ros/noetic
+-- Found PythonInterp: /usr/bin/python3 (found suitable version "3.8.10", minimum required is "3") 
+-- Using PYTHON_EXECUTABLE: /usr/bin/python3
+-- Using Debian Python package layout
+-- Using empy: /usr/lib/python3/dist-packages/em.py
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /workspace/build/test_results
+-- Forcing gtest/gmock from source, though one was otherwise available.
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+-- Found PythonInterp: /usr/bin/python3 (found version "3.8.10") 
+-- Using Python nosetests: /usr/bin/nosetests3
+-- catkin 0.8.12
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 35 packages in topological order:
+-- ~~  - building_generator_core
+-- ~~  - building_generator_interfaces
+-- ~~  - quadrotor_msgs
+-- ~~  - unitree_legged_sdk
+-- ~~  - a1_description
+-- ~~  - cmake_utils
+-- ~~  - map_generator
+-- ~~  - pose_utils
+-- ~~  - building_obstacles
+-- ~~  - building_generator_classic
+-- ~~  - livox_laser_simulation
+-- ~~  - odom_visualization
+-- ~~  - local_planner
+-- ~~  - local_sensing_node
+-- ~~  - mockamap
+-- ~~  - sensor_scan_generation
+-- ~~  - so3_control
+-- ~~  - tare_planner
+-- ~~  - semantic_mapping
+-- ~~  - terrain_analysis
+-- ~~  - terrain_analysis_ext
+-- ~~  - multi_map_server
+-- ~~  - uav_utils
+-- ~~  - so3_quadrotor_simulator
+-- ~~  - unitree_legged_msgs
+-- ~~  - unitree_legged_control
+-- ~~  - unitree_legged_real
+-- ~~  - unitree_motor_ctrl
+-- ~~  - rviz_plugins
+-- ~~  - unitree_controller
+-- ~~  - unitree_gazebo
+-- ~~  - unitree_guide
+-- ~~  - unitree_move_base
+-- ~~  - waypoint_generator
+-- ~~  - waypoint_rviz_plugin
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'building_generator_core'
+-- ==> add_subdirectory(building_generator_core)
+-- Installing devel-space wrapper /workspace/src/building_generator_core/scripts/building_generator_cli to /workspace/devel/lib/building_generator_core
+-- +++ processing catkin package: 'building_generator_interfaces'
+-- ==> add_subdirectory(building_generator_interfaces)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- building_generator_interfaces: 0 messages, 2 services
+-- +++ processing catkin package: 'quadrotor_msgs'
+-- ==> add_subdirectory(uav_simulator/Utils/quadrotor_msgs)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- quadrotor_msgs: 13 messages, 0 services
+-- +++ processing catkin package: 'unitree_legged_sdk'
+-- ==> add_subdirectory(unitree_guide/unitree_ros_to_real/unitree_legged_sdk)
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- +++ processing catkin package: 'a1_description'
+-- ==> add_subdirectory(unitree_guide/unitree_ros/robots/a1_description)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'cmake_utils'
+-- ==> add_subdirectory(uav_simulator/Utils/cmake_utils)
+-- +++ processing catkin package: 'map_generator'
+-- ==> add_subdirectory(uav_simulator/map_generator)
+-- Found Eigen: /usr/include/eigen3 (Required is at least version "3.1") 
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- Found Boost: /usr/include (found suitable version "1.71.0", minimum required is "1.55.0") found components: system filesystem date_time iostreams regex 
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+-- QHULL found (include: /usr/include, lib: optimized;/usr/lib/x86_64-linux-gnu/libqhull.so;debug;/usr/lib/x86_64-linux-gnu/libqhull.so)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- looking for PCL_COMMON
+-- looking for PCL_KDTREE
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_2D
+-- looking for PCL_GEOMETRY
+-- looking for PCL_IO
+-- looking for PCL_FEATURES
+-- looking for PCL_ML
+-- looking for PCL_SEGMENTATION
+-- looking for PCL_VISUALIZATION
+-- looking for PCL_SURFACE
+-- looking for PCL_REGISTRATION
+-- looking for PCL_KEYPOINTS
+-- looking for PCL_TRACKING
+-- looking for PCL_RECOGNITION
+-- looking for PCL_STEREO
+-- looking for PCL_APPS
+-- looking for PCL_IN_HAND_SCANNER
+-- looking for PCL_POINT_CLOUD_EDITOR
+-- looking for PCL_OUTOFCORE
+-- looking for PCL_PEOPLE
+-- +++ processing catkin package: 'pose_utils'
+-- ==> add_subdirectory(uav_simulator/Utils/pose_utils)
+-- +++ processing catkin package: 'building_obstacles'
+-- ==> add_subdirectory(building_obstacles)
+WARNING: package 'gazebo_msgs' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+-- Installing devel-space wrapper /workspace/src/building_obstacles/scripts/generate_competition_scene.py to /workspace/devel/lib/building_obstacles
+-- Installing devel-space wrapper /workspace/src/building_obstacles/scripts/generate_multi_floor_building.py to /workspace/devel/lib/building_obstacles
+-- Installing devel-space wrapper /workspace/src/building_obstacles/scripts/spawn_red_spheres.py to /workspace/devel/lib/building_obstacles
+-- Installing devel-space wrapper /workspace/src/building_obstacles/scripts/evaluate_danger.py to /workspace/devel/lib/building_obstacles
+-- Installing devel-space wrapper /workspace/src/building_obstacles/scripts/evaulate_danger.py to /workspace/devel/lib/building_obstacles
+-- +++ processing catkin package: 'building_generator_classic'
+-- ==> add_subdirectory(building_generator_classic)
+WARNING: package 'gazebo_msgs' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Installing devel-space wrapper /workspace/src/building_generator_classic/scripts/building_generator_classic_control to /workspace/devel/lib/building_generator_classic
+-- +++ processing catkin package: 'livox_laser_simulation'
+-- ==> add_subdirectory(Mid360_imu_sim)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Found DART: /usr/include (Required is at least version "6.6") found components: dart 
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found suitable version "1.71.0", minimum required is "1.40.0") found components: thread system filesystem program_options regex iostreams date_time 
+-- Found Protobuf: /usr/lib/x86_64-linux-gnu/libprotobuf.so;-lpthread (found version "3.6.1") 
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Searching for dependencies of ignition-math6
+-- Looking for OGRE...
+-- Found Ogre Ghadamon (1.9.0)
+-- Found OGRE: optimized;/usr/lib/x86_64-linux-gnu/libOgreMain.so;debug;/usr/lib/x86_64-linux-gnu/libOgreMain.so
+-- Looking for OGRE_Paging...
+-- Found OGRE_Paging: optimized;/usr/lib/x86_64-linux-gnu/libOgrePaging.so;debug;/usr/lib/x86_64-linux-gnu/libOgrePaging.so
+-- Looking for OGRE_Terrain...
+-- Found OGRE_Terrain: optimized;/usr/lib/x86_64-linux-gnu/libOgreTerrain.so;debug;/usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+-- Looking for OGRE_Property...
+-- Found OGRE_Property: optimized;/usr/lib/x86_64-linux-gnu/libOgreProperty.so;debug;/usr/lib/x86_64-linux-gnu/libOgreProperty.so
+-- Looking for OGRE_RTShaderSystem...
+-- Found OGRE_RTShaderSystem: optimized;/usr/lib/x86_64-linux-gnu/libOgreRTShaderSystem.so;debug;/usr/lib/x86_64-linux-gnu/libOgreRTShaderSystem.so
+-- Looking for OGRE_Volume...
+-- Found OGRE_Volume: optimized;/usr/lib/x86_64-linux-gnu/libOgreVolume.so;debug;/usr/lib/x86_64-linux-gnu/libOgreVolume.so
+-- Looking for OGRE_Overlay...
+-- Found OGRE_Overlay: optimized;/usr/lib/x86_64-linux-gnu/libOgreOverlay.so;debug;/usr/lib/x86_64-linux-gnu/libOgreOverlay.so
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-transport8 -- found version 8.5.0
+-- Searching for dependencies of ignition-transport8
+-- Config-file not installed for ZeroMQ -- checking for pkg-config
+-- Checking for module 'libzmq >= 4'
+--   Found libzmq , version 4.3.2
+-- Checking for module 'uuid'
+--   Found uuid, version 2.34.0
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- Searching for dependencies of ignition-msgs5
+-- Found Protobuf: /usr/lib/x86_64-linux-gnu/libprotobuf.so;-lpthread (found suitable version "3.6.1", minimum required is "3") 
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Checking for module 'tinyxml2'
+--   Found tinyxml2, version 6.2.0
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- Looking for ignition-common3 -- found version 3.17.0
+-- Searching for dependencies of ignition-common3
+-- Looking for dlfcn.h - found
+-- Looking for libdl - found
+-- Searching for <ignition-common3> component [graphics]
+-- Looking for ignition-common3-graphics -- found version 3.17.0
+-- Searching for dependencies of ignition-common3-graphics
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-fuel_tools4 -- found version 4.9.1
+-- Searching for dependencies of ignition-fuel_tools4
+-- Checking for module 'jsoncpp'
+--   Found jsoncpp, version 1.7.4
+-- Checking for module 'yaml-0.1'
+--   Found yaml-0.1, version 0.2.2
+-- Checking for module 'libzip'
+--   Found libzip, version 1.5.1
+-- Looking for ignition-common3 -- found version 3.17.0
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- +++ processing catkin package: 'odom_visualization'
+-- ==> add_subdirectory(uav_simulator/Utils/odom_visualization)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'local_planner'
+-- ==> add_subdirectory(local_planner)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- Found Boost: /usr/include (found suitable version "1.71.0", minimum required is "1.55.0") found components: system filesystem date_time iostreams regex 
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+-- QHULL found (include: /usr/include, lib: optimized;/usr/lib/x86_64-linux-gnu/libqhull.so;debug;/usr/lib/x86_64-linux-gnu/libqhull.so)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- looking for PCL_COMMON
+-- looking for PCL_KDTREE
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_2D
+-- looking for PCL_GEOMETRY
+-- looking for PCL_IO
+-- looking for PCL_FEATURES
+-- looking for PCL_ML
+-- looking for PCL_SEGMENTATION
+-- looking for PCL_VISUALIZATION
+-- looking for PCL_SURFACE
+-- looking for PCL_REGISTRATION
+-- looking for PCL_KEYPOINTS
+-- looking for PCL_TRACKING
+-- looking for PCL_RECOGNITION
+-- looking for PCL_STEREO
+-- looking for PCL_APPS
+-- looking for PCL_IN_HAND_SCANNER
+-- looking for PCL_POINT_CLOUD_EDITOR
+-- looking for PCL_OUTOFCORE
+-- looking for PCL_PEOPLE
+-- +++ processing catkin package: 'local_sensing_node'
+-- ==> add_subdirectory(uav_simulator/local_sensing)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+CMake Warning at /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:166 (message):
+  catkin_package() DEPENDS on 'Eigen' but neither 'Eigen_INCLUDE_DIRS' nor
+  'Eigen_LIBRARIES' is defined.
+Call Stack (most recent call first):
+  /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  uav_simulator/local_sensing/CMakeLists.txt:72 (catkin_package)
+
+
+-- +++ processing catkin package: 'mockamap'
+-- ==> add_subdirectory(uav_simulator/mockamap)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'sensor_scan_generation'
+-- ==> add_subdirectory(sensor_scan_generation)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+-- QHULL found (include: /usr/include, lib: optimized;/usr/lib/x86_64-linux-gnu/libqhull.so;debug;/usr/lib/x86_64-linux-gnu/libqhull.so)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- looking for PCL_COMMON
+-- looking for PCL_KDTREE
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_2D
+-- looking for PCL_GEOMETRY
+-- looking for PCL_IO
+-- looking for PCL_FEATURES
+-- looking for PCL_ML
+-- looking for PCL_SEGMENTATION
+-- looking for PCL_VISUALIZATION
+-- looking for PCL_SURFACE
+-- looking for PCL_REGISTRATION
+-- looking for PCL_KEYPOINTS
+-- looking for PCL_TRACKING
+-- looking for PCL_RECOGNITION
+-- looking for PCL_STEREO
+-- looking for PCL_APPS
+-- looking for PCL_IN_HAND_SCANNER
+-- looking for PCL_POINT_CLOUD_EDITOR
+-- looking for PCL_OUTOFCORE
+-- looking for PCL_PEOPLE
+-- +++ processing catkin package: 'so3_control'
+-- ==> add_subdirectory(uav_simulator/so3_control)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'tare_planner'
+-- ==> add_subdirectory(exploration_planner)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+-- QHULL found (include: /usr/include, lib: optimized;/usr/lib/x86_64-linux-gnu/libqhull.so;debug;/usr/lib/x86_64-linux-gnu/libqhull.so)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- looking for PCL_COMMON
+-- looking for PCL_KDTREE
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_2D
+-- looking for PCL_GEOMETRY
+-- looking for PCL_IO
+-- looking for PCL_FEATURES
+-- looking for PCL_ML
+-- looking for PCL_SEGMENTATION
+-- looking for PCL_VISUALIZATION
+-- looking for PCL_SURFACE
+-- looking for PCL_REGISTRATION
+-- looking for PCL_KEYPOINTS
+-- looking for PCL_TRACKING
+-- looking for PCL_RECOGNITION
+-- looking for PCL_STEREO
+-- looking for PCL_APPS
+-- looking for PCL_IN_HAND_SCANNER
+-- looking for PCL_POINT_CLOUD_EDITOR
+-- looking for PCL_OUTOFCORE
+-- looking for PCL_PEOPLE
+-- tare_planner: 14 messages, 0 services
+-- +++ processing catkin package: 'semantic_mapping'
+-- ==> add_subdirectory(semantic_mapping)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Installing devel-space wrapper /workspace/src/semantic_mapping/scripts/semantic_mapping_node to /workspace/devel/lib/semantic_mapping
+-- Installing devel-space wrapper /workspace/src/semantic_mapping/scripts/detection_node to /workspace/devel/lib/semantic_mapping
+-- +++ processing catkin package: 'terrain_analysis'
+-- ==> add_subdirectory(terrain_analysis)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+-- QHULL found (include: /usr/include, lib: optimized;/usr/lib/x86_64-linux-gnu/libqhull.so;debug;/usr/lib/x86_64-linux-gnu/libqhull.so)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- looking for PCL_COMMON
+-- looking for PCL_KDTREE
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_2D
+-- looking for PCL_GEOMETRY
+-- looking for PCL_IO
+-- looking for PCL_FEATURES
+-- looking for PCL_ML
+-- looking for PCL_SEGMENTATION
+-- looking for PCL_VISUALIZATION
+-- looking for PCL_SURFACE
+-- looking for PCL_REGISTRATION
+-- looking for PCL_KEYPOINTS
+-- looking for PCL_TRACKING
+-- looking for PCL_RECOGNITION
+-- looking for PCL_STEREO
+-- looking for PCL_APPS
+-- looking for PCL_IN_HAND_SCANNER
+-- looking for PCL_POINT_CLOUD_EDITOR
+-- looking for PCL_OUTOFCORE
+-- looking for PCL_PEOPLE
+-- +++ processing catkin package: 'terrain_analysis_ext'
+-- ==> add_subdirectory(terrain_analysis_ext)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Eigen found (include: /usr/include/eigen3, version: 3.3.7)
+-- The imported target "vtkParseOGLExt" references the file
+   "/usr/bin/vtkParseOGLExt-7.1"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtkRenderingPythonTkWidgets" references the file
+   "/usr/lib/x86_64-linux-gnu/libvtkRenderingPythonTkWidgets.so"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "vtk" references the file
+   "/usr/bin/vtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- The imported target "pvtk" references the file
+   "/usr/bin/pvtk"
+but this file does not exist.  Possible reasons include:
+* The file was deleted, renamed, or moved to another location.
+* An install or uninstall procedure did not complete successfully.
+* The installation package was faulty and contained
+   "/usr/lib/cmake/vtk-7.1/VTKTargets.cmake"
+but not all the files it references.
+
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+** WARNING ** io features related to pcap will be disabled
+** WARNING ** io features related to png will be disabled
+** WARNING ** io features related to libusb-1.0 will be disabled
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- OpenNI2 found (include: /usr/include/openni2, lib: /usr/lib/libOpenNI2.so)
+-- QHULL found (include: /usr/include, lib: optimized;/usr/lib/x86_64-linux-gnu/libqhull.so;debug;/usr/lib/x86_64-linux-gnu/libqhull.so)
+-- OpenNI found (include: /usr/include/ni, lib: /usr/lib/libOpenNI.so)
+-- looking for PCL_COMMON
+-- looking for PCL_KDTREE
+-- looking for PCL_OCTREE
+-- looking for PCL_SEARCH
+-- looking for PCL_SAMPLE_CONSENSUS
+-- looking for PCL_FILTERS
+-- looking for PCL_2D
+-- looking for PCL_GEOMETRY
+-- looking for PCL_IO
+-- looking for PCL_FEATURES
+-- looking for PCL_ML
+-- looking for PCL_SEGMENTATION
+-- looking for PCL_VISUALIZATION
+-- looking for PCL_SURFACE
+-- looking for PCL_REGISTRATION
+-- looking for PCL_KEYPOINTS
+-- looking for PCL_TRACKING
+-- looking for PCL_RECOGNITION
+-- looking for PCL_STEREO
+-- looking for PCL_APPS
+-- looking for PCL_IN_HAND_SCANNER
+-- looking for PCL_POINT_CLOUD_EDITOR
+-- looking for PCL_OUTOFCORE
+-- looking for PCL_PEOPLE
+-- +++ processing catkin package: 'multi_map_server'
+-- ==> add_subdirectory(uav_simulator/Utils/multi_map_server)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- multi_map_server: 4 messages, 0 services
+-- +++ processing catkin package: 'uav_utils'
+-- ==> add_subdirectory(uav_simulator/Utils/uav_utils)
+-- Found Eigen: /usr/include/eigen3 (found version "3.3.7") 
+-- +++ processing catkin package: 'so3_quadrotor_simulator'
+-- ==> add_subdirectory(uav_simulator/so3_quadrotor_simulator)
+CMake Warning at /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:166 (message):
+  catkin_package() DEPENDS on 'Eigen3' but neither 'Eigen3_INCLUDE_DIRS' nor
+  'Eigen3_LIBRARIES' is defined.
+Call Stack (most recent call first):
+  /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  uav_simulator/so3_quadrotor_simulator/CMakeLists.txt:29 (catkin_package)
+
+
+CMake Warning at /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:166 (message):
+  catkin_package() DEPENDS on 'system_lib' but neither
+  'system_lib_INCLUDE_DIRS' nor 'system_lib_LIBRARIES' is defined.
+Call Stack (most recent call first):
+  /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  uav_simulator/so3_quadrotor_simulator/CMakeLists.txt:29 (catkin_package)
+
+
+-- +++ processing catkin package: 'unitree_legged_msgs'
+-- ==> add_subdirectory(unitree_guide/unitree_ros_to_real/unitree_legged_msgs)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- unitree_legged_msgs: 11 messages, 0 services
+-- +++ processing catkin package: 'unitree_legged_control'
+-- ==> add_subdirectory(unitree_guide/unitree_ros/unitree_legged_control)
+-- +++ processing catkin package: 'unitree_legged_real'
+-- ==> add_subdirectory(unitree_guide/unitree_ros_to_real/unitree_legged_real)
+-- CMAKE_SYSTEM_PROCESSOR: x86_64
+-- +++ processing catkin package: 'unitree_motor_ctrl'
+-- ==> add_subdirectory(unitree_guide/unitree_guide/unitree_actuator_sdk/unitree_motor_ctrl)
+-- +++ processing catkin package: 'rviz_plugins'
+-- ==> add_subdirectory(uav_simulator/Utils/rviz_plugins)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+CMake Warning at /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:166 (message):
+  catkin_package() DEPENDS on 'system_lib' but neither
+  'system_lib_INCLUDE_DIRS' nor 'system_lib_LIBRARIES' is defined.
+Call Stack (most recent call first):
+  /opt/ros/noetic/share/catkin/cmake/catkin_package.cmake:102 (_catkin_package)
+  uav_simulator/Utils/rviz_plugins/CMakeLists.txt:12 (catkin_package)
+
+
+-- Using Qt5 based on the rviz_QT_VERSION: 5.12.8
+-- +++ processing catkin package: 'unitree_controller'
+-- ==> add_subdirectory(unitree_guide/unitree_ros/unitree_controller)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+WARNING: package 'gazebo_ros' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+WARNING: package 'gazebo_msgs' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+-- Found DART: /usr/include (Required is at least version "6.6") found components: dart 
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found suitable version "1.71.0", minimum required is "1.40.0") found components: thread system filesystem program_options regex iostreams date_time 
+-- Found Protobuf: /usr/lib/x86_64-linux-gnu/libprotobuf.so;-lpthread (found version "3.6.1") 
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Searching for dependencies of ignition-math6
+-- Looking for OGRE...
+-- Found Ogre Ghadamon (1.9.0)
+-- Found OGRE: optimized;/usr/lib/x86_64-linux-gnu/libOgreMain.so;debug;/usr/lib/x86_64-linux-gnu/libOgreMain.so
+-- Looking for OGRE_Paging...
+-- Found OGRE_Paging: optimized;/usr/lib/x86_64-linux-gnu/libOgrePaging.so;debug;/usr/lib/x86_64-linux-gnu/libOgrePaging.so
+-- Looking for OGRE_Terrain...
+-- Found OGRE_Terrain: optimized;/usr/lib/x86_64-linux-gnu/libOgreTerrain.so;debug;/usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+-- Looking for OGRE_Property...
+-- Found OGRE_Property: optimized;/usr/lib/x86_64-linux-gnu/libOgreProperty.so;debug;/usr/lib/x86_64-linux-gnu/libOgreProperty.so
+-- Looking for OGRE_RTShaderSystem...
+-- Found OGRE_RTShaderSystem: optimized;/usr/lib/x86_64-linux-gnu/libOgreRTShaderSystem.so;debug;/usr/lib/x86_64-linux-gnu/libOgreRTShaderSystem.so
+-- Looking for OGRE_Volume...
+-- Found OGRE_Volume: optimized;/usr/lib/x86_64-linux-gnu/libOgreVolume.so;debug;/usr/lib/x86_64-linux-gnu/libOgreVolume.so
+-- Looking for OGRE_Overlay...
+-- Found OGRE_Overlay: optimized;/usr/lib/x86_64-linux-gnu/libOgreOverlay.so;debug;/usr/lib/x86_64-linux-gnu/libOgreOverlay.so
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-transport8 -- found version 8.5.0
+-- Searching for dependencies of ignition-transport8
+-- Config-file not installed for ZeroMQ -- checking for pkg-config
+-- Checking for module 'libzmq >= 4'
+--   Found libzmq , version 4.3.2
+-- Checking for module 'uuid'
+--   Found uuid, version 2.34.0
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- Searching for dependencies of ignition-msgs5
+-- Found Protobuf: /usr/lib/x86_64-linux-gnu/libprotobuf.so;-lpthread (found suitable version "3.6.1", minimum required is "3") 
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Checking for module 'tinyxml2'
+--   Found tinyxml2, version 6.2.0
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- Looking for ignition-common3 -- found version 3.17.0
+-- Searching for dependencies of ignition-common3
+-- Looking for dlfcn.h - found
+-- Looking for libdl - found
+-- Searching for <ignition-common3> component [graphics]
+-- Looking for ignition-common3-graphics -- found version 3.17.0
+-- Searching for dependencies of ignition-common3-graphics
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-fuel_tools4 -- found version 4.9.1
+-- Searching for dependencies of ignition-fuel_tools4
+-- Checking for module 'jsoncpp'
+--   Found jsoncpp, version 1.7.4
+-- Checking for module 'yaml-0.1'
+--   Found yaml-0.1, version 0.2.2
+-- Checking for module 'libzip'
+--   Found libzip, version 1.5.1
+-- Looking for ignition-common3 -- found version 3.17.0
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- +++ processing catkin package: 'unitree_gazebo'
+-- ==> add_subdirectory(unitree_guide/unitree_ros/unitree_gazebo)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+WARNING: package 'gazebo_ros' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+WARNING: package 'gazebo_msgs' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+-- Found DART: /usr/include (Required is at least version "6.6") found components: dart 
+-- Found Protobuf: /usr/lib/x86_64-linux-gnu/libprotobuf.so;-lpthread (found version "3.6.1") 
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Searching for dependencies of ignition-math6
+-- Looking for OGRE...
+-- Found Ogre Ghadamon (1.9.0)
+-- Found OGRE: optimized;/usr/lib/x86_64-linux-gnu/libOgreMain.so;debug;/usr/lib/x86_64-linux-gnu/libOgreMain.so
+-- Looking for OGRE_Paging...
+-- Found OGRE_Paging: optimized;/usr/lib/x86_64-linux-gnu/libOgrePaging.so;debug;/usr/lib/x86_64-linux-gnu/libOgrePaging.so
+-- Looking for OGRE_Terrain...
+-- Found OGRE_Terrain: optimized;/usr/lib/x86_64-linux-gnu/libOgreTerrain.so;debug;/usr/lib/x86_64-linux-gnu/libOgreTerrain.so
+-- Looking for OGRE_Property...
+-- Found OGRE_Property: optimized;/usr/lib/x86_64-linux-gnu/libOgreProperty.so;debug;/usr/lib/x86_64-linux-gnu/libOgreProperty.so
+-- Looking for OGRE_RTShaderSystem...
+-- Found OGRE_RTShaderSystem: optimized;/usr/lib/x86_64-linux-gnu/libOgreRTShaderSystem.so;debug;/usr/lib/x86_64-linux-gnu/libOgreRTShaderSystem.so
+-- Looking for OGRE_Volume...
+-- Found OGRE_Volume: optimized;/usr/lib/x86_64-linux-gnu/libOgreVolume.so;debug;/usr/lib/x86_64-linux-gnu/libOgreVolume.so
+-- Looking for OGRE_Overlay...
+-- Found OGRE_Overlay: optimized;/usr/lib/x86_64-linux-gnu/libOgreOverlay.so;debug;/usr/lib/x86_64-linux-gnu/libOgreOverlay.so
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-transport8 -- found version 8.5.0
+-- Searching for dependencies of ignition-transport8
+-- Config-file not installed for ZeroMQ -- checking for pkg-config
+-- Checking for module 'libzmq >= 4'
+--   Found libzmq , version 4.3.2
+-- Checking for module 'uuid'
+--   Found uuid, version 2.34.0
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- Searching for dependencies of ignition-msgs5
+-- Found Protobuf: /usr/lib/x86_64-linux-gnu/libprotobuf.so;-lpthread (found suitable version "3.6.1", minimum required is "3") 
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Checking for module 'tinyxml2'
+--   Found tinyxml2, version 6.2.0
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- Looking for ignition-common3 -- found version 3.17.0
+-- Searching for dependencies of ignition-common3
+-- Looking for dlfcn.h - found
+-- Looking for libdl - found
+-- Searching for <ignition-common3> component [graphics]
+-- Looking for ignition-common3-graphics -- found version 3.17.0
+-- Searching for dependencies of ignition-common3-graphics
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-fuel_tools4 -- found version 4.9.1
+-- Searching for dependencies of ignition-fuel_tools4
+-- Checking for module 'jsoncpp'
+--   Found jsoncpp, version 1.7.4
+-- Checking for module 'yaml-0.1'
+--   Found yaml-0.1, version 0.2.2
+-- Checking for module 'libzip'
+--   Found libzip, version 1.5.1
+-- Looking for ignition-common3 -- found version 3.17.0
+-- Looking for ignition-math6 -- found version 6.15.1
+-- Looking for ignition-msgs5 -- found version 5.11.0
+-- +++ processing catkin package: 'unitree_guide'
+-- ==> add_subdirectory(unitree_guide/unitree_guide/unitree_guide)
+-- Found Boost: /usr/lib/x86_64-linux-gnu/cmake/Boost-1.71.0/BoostConfig.cmake (found version "1.71.0")  
+WARNING: package 'gazebo_ros' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+WARNING: package 'gazebo_msgs' is deprecated (This package has been deprecated as of January 2025 with Gazebo classic 11 reaching
+      end-of-life. Users are highly encouraged to migrate to the new Gazebo
+      using our migration guides (https://gazebosim.org/docs/latest/gazebo_classic_migration))
+-- unitree_guide: 2 messages, 0 services
+-- Installing devel-space wrapper /workspace/src/unitree_guide/unitree_guide/unitree_guide/scripts/virtual_joy.py to /workspace/devel/lib/unitree_guide
+-- Installing devel-space wrapper /workspace/src/unitree_guide/unitree_guide/unitree_guide/scripts/keyboard_teleop.py to /workspace/devel/lib/unitree_guide
+-- Installing devel-space wrapper /workspace/src/unitree_guide/unitree_guide/unitree_guide/scripts/pointcloud2livox.py to /workspace/devel/lib/unitree_guide
+-- +++ processing catkin package: 'unitree_move_base'
+-- ==> add_subdirectory(unitree_guide/unitree_guide/unitree_move_base)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'waypoint_generator'
+-- ==> add_subdirectory(uav_simulator/Utils/waypoint_generator)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- +++ processing catkin package: 'waypoint_rviz_plugin'
+-- ==> add_subdirectory(waypoint_rviz_plugin)
+-- Using these message generators: gencpp;geneus;genlisp;gennodejs;genpy
+-- Using Qt5 based on the rviz_QT_VERSION: 5.12.8
+-- Configuring done
+CMake Warning (dev) at uav_simulator/Utils/multi_map_server/CMakeLists.txt:167 (add_dependencies):
+  Policy CMP0046 is not set: Error on non-existent dependency in
+  add_dependencies.  Run "cmake --help-policy CMP0046" for policy details.
+  Use the cmake_policy command to set the policy and suppress this warning.
+
+  The dependency target "multi_map_server_messages_cpp" of target
+  "multi_map_visualization" does not exist.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+CMake Warning at exploration_planner/CMakeLists.txt:137 (add_executable):
+  Cannot generate a safe linker search path for target room_segmentation
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:133 (add_executable):
+  Cannot generate a safe linker search path for target tare_planner_node
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target
+  sensor_coverage_planner_ground because files in some directories may
+  conflict with libraries in implicit directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:126 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target tare_visualizer
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:122 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target exploration_path
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:120 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target rolling_occupancy_grid
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:116 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target pointcloud_manager
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:111 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target rolling_grid because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:101 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target viewpoint because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:99 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target tsp_solver because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:97 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target planning_env because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:118 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target local_coverage_planner
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:106 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target graph because files in
+  some directories may conflict with libraries in implicit directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:92 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target representation because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:124 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target lidar_model because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:91 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target pointcloud_utils
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:95 (tare_add_lib)
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:129 (add_executable):
+  Cannot generate a safe linker search path for target navigationBoundary
+  because files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+
+
+CMake Warning at exploration_planner/CMakeLists.txt:86 (add_library):
+  Cannot generate a safe linker search path for target misc_utils because
+  files in some directories may conflict with libraries in implicit
+  directories:
+
+    link library [libz.so] in /usr/lib/x86_64-linux-gnu may be hidden by files in:
+      /workspace/src/exploration_planner/or-tools/lib
+
+  Some of these libraries may not be found correctly.
+Call Stack (most recent call first):
+  exploration_planner/CMakeLists.txt:93 (tare_add_lib)
+
+
+-- Generating done
+-- Build files have been written to: /workspace/build
+[  0%] Built target _building_generator_interfaces_generate_messages_check_deps_CallElevator
+[  0%] Built target _building_generator_interfaces_generate_messages_check_deps_SetDoorState
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_StatusData
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_Odometry
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_LQRTrajectory
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_AuxCommand
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_Corrections
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_Gains
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_OutputData
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_PositionCommand
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_PPROutputData
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_Serial
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_PolynomialTrajectory
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_SO3Command
+[  0%] Built target _quadrotor_msgs_generate_messages_check_deps_TRPYCommand
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target example_joystick
+[  1%] Built target example_walk
+[  1%] Built target example_torque
+[  1%] Built target example_velocity
+[  2%] Built target example_position
+[  2%] Built target pose_utils
+[  2%] Built target random_forest
+[  3%] Built target livox_laser_simulation
+[  3%] Built target pathFollower
+[  3%] Built target localPlanner
+[  4%] Built target mockamap_node
+[  4%] Built target SO3Control
+[  4%] Built target sensorScanGeneration
+[  4%] Built target std_msgs_generate_messages_nodejs
+[  4%] Built target _tare_planner_generate_messages_check_deps_TargetObjectWithSpatial
+[  4%] Built target sensor_msgs_generate_messages_nodejs
+[  4%] Built target _tare_planner_generate_messages_check_deps_NavigationQuery
+[  4%] Built target _tare_planner_generate_messages_check_deps_ObjectType
+[  4%] Built target _tare_planner_generate_messages_check_deps_RoomEarlyStop1
+[  4%] Built target _tare_planner_generate_messages_check_deps_ViewpointRep
+[  4%] Built target _tare_planner_generate_messages_check_deps_RoomNodeList
+[  4%] Built target _tare_planner_generate_messages_check_deps_DetectionResult
+[  4%] Built target _tare_planner_generate_messages_check_deps_TargetObject
+[  4%] Built target _tare_planner_generate_messages_check_deps_TargetObjectInstruction
+[  4%] Built target _tare_planner_generate_messages_check_deps_VlmAnswer
+[  4%] Built target _tare_planner_generate_messages_check_deps_RoomType
+[  4%] Built target _tare_planner_generate_messages_check_deps_ObjectNodeList
+[  4%] Built target _tare_planner_generate_messages_check_deps_ObjectNode
+[  4%] Built target std_msgs_generate_messages_py
+[  4%] Built target rosgraph_msgs_generate_messages_lisp
+[  4%] Built target _tare_planner_generate_messages_check_deps_RoomNode
+[  4%] Built target actionlib_msgs_generate_messages_eus
+[  4%] Built target rosgraph_msgs_generate_messages_eus
+[  4%] Built target roscpp_generate_messages_cpp
+[  4%] Built target roscpp_generate_messages_eus
+[  4%] Built target rosgraph_msgs_generate_messages_nodejs
+[  4%] Built target actionlib_msgs_generate_messages_py
+[  4%] Built target actionlib_msgs_generate_messages_cpp
+[  4%] Built target std_msgs_generate_messages_lisp
+[  4%] Built target roscpp_generate_messages_py
+[  4%] Built target roscpp_generate_messages_nodejs
+[  4%] Built target rosgraph_msgs_generate_messages_cpp
+[  4%] Built target actionlib_msgs_generate_messages_lisp
+[  4%] Built target std_msgs_generate_messages_eus
+[  4%] Built target actionlib_msgs_generate_messages_nodejs
+[  4%] Built target rosgraph_msgs_generate_messages_py
+[  4%] Built target roscpp_generate_messages_lisp
+[  4%] Built target std_msgs_generate_messages_cpp
+[  4%] Built target tf2_msgs_generate_messages_py
+[  4%] Built target tf2_msgs_generate_messages_nodejs
+[  4%] Built target tf2_msgs_generate_messages_cpp
+[  4%] Built target actionlib_generate_messages_nodejs
+[  4%] Built target tf_generate_messages_cpp
+[  4%] Built target tf_generate_messages_nodejs
+[  4%] Built target sensor_msgs_generate_messages_cpp
+[  4%] Built target actionlib_generate_messages_py
+[  4%] Built target tf_generate_messages_eus
+[  4%] Built target tf_generate_messages_py
+[  4%] Built target sensor_msgs_generate_messages_lisp
+[  4%] Built target tf2_msgs_generate_messages_lisp
+[  4%] Built target tf_generate_messages_lisp
+[  4%] Built target sensor_msgs_generate_messages_py
+[  4%] Built target actionlib_generate_messages_lisp
+[  4%] Built target sensor_msgs_generate_messages_eus
+[  4%] Built target tf2_msgs_generate_messages_eus
+[  4%] Built target actionlib_generate_messages_cpp
+[  4%] Built target actionlib_generate_messages_eus
+[  4%] Built target pcl_msgs_generate_messages_nodejs
+[  4%] Built target pcl_msgs_generate_messages_py
+[  4%] Built target pcl_msgs_generate_messages_lisp
+[  4%] Built target pcl_msgs_generate_messages_eus
+[  4%] Built target pcl_msgs_generate_messages_cpp
+[  4%] Built target std_srvs_generate_messages_py
+[  4%] Built target std_srvs_generate_messages_nodejs
+[  4%] Built target std_srvs_generate_messages_cpp
+[  4%] Built target std_srvs_generate_messages_eus
+[  4%] Built target std_srvs_generate_messages_lisp
+[  4%] Built target visualization_msgs_generate_messages_py
+[  4%] Built target visualization_msgs_generate_messages_nodejs
+[  4%] Built target visualization_msgs_generate_messages_eus
+[  4%] Built target visualization_msgs_generate_messages_lisp
+[  4%] Built target visualization_msgs_generate_messages_cpp
+[  4%] Built target nodelet_generate_messages_lisp
+[  4%] Built target nodelet_generate_messages_py
+[  4%] Built target bond_generate_messages_lisp
+[  4%] Built target nodelet_generate_messages_eus
+[  4%] Built target topic_tools_generate_messages_cpp
+[  4%] Built target pcl_ros_gencfg
+[  4%] Built target dynamic_reconfigure_generate_messages_lisp
+[  4%] Built target topic_tools_generate_messages_py
+[  4%] Built target dynamic_reconfigure_generate_messages_py
+[  4%] Built target dynamic_reconfigure_gencfg
+[  4%] Built target nodelet_generate_messages_cpp
+[  4%] Built target dynamic_reconfigure_generate_messages_eus
+[  4%] Built target bond_generate_messages_cpp
+[  4%] Built target bond_generate_messages_eus
+[  4%] Built target nodelet_generate_messages_nodejs
+[  4%] Built target bond_generate_messages_nodejs
+[  4%] Built target bond_generate_messages_py
+[  4%] Built target topic_tools_generate_messages_lisp
+[  4%] Built target dynamic_reconfigure_generate_messages_nodejs
+[  4%] Built target nodelet_topic_tools_gencfg
+[  4%] Built target dynamic_reconfigure_generate_messages_cpp
+[  4%] Built target topic_tools_generate_messages_eus
+[  4%] Built target topic_tools_generate_messages_nodejs
+[  8%] Built target tare_planner_generate_messages_py
+[ 11%] Built target tare_planner_generate_messages_cpp
+[ 15%] Built target tare_planner_generate_messages_eus
+[ 18%] Built target tare_planner_generate_messages_lisp
+[ 18%] Built target terrainAnalysis
+[ 19%] Built target terrainAnalysisExt
+[ 19%] Built target _multi_map_server_generate_messages_check_deps_VerticalOccupancyGridList
+[ 19%] Built target _multi_map_server_generate_messages_check_deps_MultiOccupancyGrid
+[ 19%] Built target _multi_map_server_generate_messages_check_deps_SparseMap3D
+[ 19%] Built target _multi_map_server_generate_messages_check_deps_MultiSparseMap3D
+[ 20%] Built target quadrotor_dynamics
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_HighState
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_MotorCmd
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_LED
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_MotorState
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_BmsState
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_LowCmd
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_HighCmd
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_BmsCmd
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_Cartesian
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_IMU
+[ 20%] Built target unitree_motor_ctrl_node
+[ 20%] Built target _unitree_legged_msgs_generate_messages_check_deps_LowState
+[ 21%] Built target unitree_move_kinetic
+[ 21%] Built target unitree_external_force
+[ 22%] Built target unitreeDrawForcePlugin
+[ 22%] Built target unitreeFootContactPlugin
+[ 23%] Built target state_from_gazebo
+[ 23%] Built target _unitree_guide_generate_messages_check_deps_CustomMsg
+[ 23%] Built target _unitree_guide_generate_messages_check_deps_CustomPoint
+[ 23%] Built target gazebo_msgs_generate_messages_cpp
+[ 23%] Built target trajectory_msgs_generate_messages_py
+[ 23%] Built target gazebo_msgs_generate_messages_py
+[ 23%] Built target trajectory_msgs_generate_messages_eus
+[ 23%] Built target gazebo_msgs_generate_messages_eus
+[ 23%] Built target gazebo_msgs_generate_messages_nodejs
+[ 23%] Built target trajectory_msgs_generate_messages_cpp
+[ 23%] Built target gazebo_msgs_generate_messages_lisp
+[ 23%] Built target trajectory_msgs_generate_messages_lisp
+[ 23%] Built target trajectory_msgs_generate_messages_nodejs
+[ 24%] Built target unitree_guide_generate_messages_cpp
+[ 25%] Built target unitree_guide_generate_messages_lisp
+[ 25%] Built target unitree_guide_generate_messages_eus
+[ 25%] Built target unitree_guide_generate_messages_nodejs
+[ 26%] Built target waypoint_generator
+[ 26%] Built target map_msgs_generate_messages_nodejs
+[ 26%] Built target rviz_generate_messages_eus
+[ 26%] Built target rviz_generate_messages_nodejs
+[ 26%] Built target rviz_generate_messages_py
+[ 26%] Built target map_msgs_generate_messages_cpp
+[ 26%] Built target rviz_generate_messages_cpp
+[ 26%] Built target rviz_generate_messages_lisp
+[ 26%] Built target map_msgs_generate_messages_lisp
+[ 26%] Built target map_msgs_generate_messages_py
+[ 26%] Built target map_msgs_generate_messages_eus
+[ 26%] Built target building_generator_interfaces_generate_messages_nodejs
+[ 27%] Built target building_generator_interfaces_generate_messages_eus
+[ 28%] Built target building_generator_interfaces_generate_messages_py
+[ 29%] Built target building_generator_interfaces_generate_messages_lisp
+[ 29%] Built target building_generator_interfaces_generate_messages_cpp
+[ 32%] Built target quadrotor_msgs_generate_messages_py
+[ 35%] Built target quadrotor_msgs_generate_messages_nodejs
+[ 38%] Built target quadrotor_msgs_generate_messages_eus
+[ 41%] Built target quadrotor_msgs_generate_messages_cpp
+[ 45%] Built target quadrotor_msgs_generate_messages_lisp
+[ 47%] Built target tare_planner_generate_messages_nodejs
+[ 50%] Built target multi_map_server_generate_messages_lisp
+[ 50%] Built target multi_map_server_generate_messages_nodejs
+[ 51%] Built target multi_map_server_generate_messages_eus
+[ 52%] Built target multi_map_server_generate_messages_cpp
+[ 54%] Built target multi_map_server_generate_messages_py
+[ 55%] Built target unitree_legged_msgs_generate_messages_cpp
+[ 59%] Built target unitree_legged_msgs_generate_messages_py
+[ 61%] Built target unitree_legged_msgs_generate_messages_nodejs
+[ 64%] Built target unitree_legged_msgs_generate_messages_eus
+[ 66%] Built target unitree_legged_msgs_generate_messages_lisp
+[ 66%] Built target unitree_legged_msgs_gencpp
+[ 67%] Built target unitree_guide_generate_messages_py
+[ 68%] Automatic MOC for target waypoint_rviz_plugin
+[ 68%] Built target building_generator_interfaces_generate_messages
+[ 68%] Built target waypoint_rviz_plugin_autogen
+[ 68%] Built target quadrotor_msgs_generate_messages
+[ 69%] Built target encode_msgs
+[ 69%] Built target decode_msgs
+[ 69%] Linking CXX shared library /workspace/devel/lib/libmisc_utils.so
+[ 69%] Linking CXX shared library /workspace/devel/lib/libexploration_path.so
+[ 70%] Built target misc_utils
+Scanning dependencies of target lidar_model
+[ 71%] Building CXX object exploration_planner/CMakeFiles/lidar_model.dir/src/lidar_model/lidar_model.cpp.o
+[ 71%] Linking CXX shared library /workspace/devel/lib/liblidar_model.so
+[ 71%] Built target lidar_model
+Scanning dependencies of target tsp_solver
+[ 71%] Building CXX object exploration_planner/CMakeFiles/tsp_solver.dir/src/tsp_solver/tsp_solver.cpp.o
+[ 71%] Linking CXX shared library /workspace/devel/lib/libtsp_solver.so
+[ 71%] Built target tsp_solver
+Scanning dependencies of target graph
+[ 72%] Building CXX object exploration_planner/CMakeFiles/graph.dir/src/graph/graph.cpp.o
+[ 72%] Linking CXX shared library /workspace/devel/lib/libgraph.so
+[ 72%] Built target graph
+Scanning dependencies of target tare_planner_generate_messages
+[ 72%] Built target tare_planner_generate_messages
+Scanning dependencies of target navigationBoundary
+[ 72%] Building CXX object exploration_planner/CMakeFiles/navigationBoundary.dir/src/navigation_boundary_publisher/navigationBoundary.cpp.o
+[ 72%] Linking CXX executable /workspace/devel/lib/tare_planner/navigationBoundary
+[ 72%] Built target navigationBoundary
+[ 73%] Built target multi_map_visualization
+[ 73%] Built target multi_map_server_generate_messages
+[ 74%] Built target quadrotor_simulator_so3
+[ 74%] Built target unitree_legged_msgs_generate_messages
+[ 75%] Built target unitree_legged_control
+[ 76%] Built target twist_sub
+[ 77%] Built target ros_udp
+[ 77%] Built target state_sub
+[ 78%] Built target ros_example_position
+[ 79%] Built target control_via_keyboard
+[ 79%] Built target ros_example_walk
+[ 82%] Built target rviz_plugins
+[ 83%] Built target unitree_controller
+[ 91%] Built target junior_ctrl
+[ 91%] Built target unitree_guide_generate_messages
+Scanning dependencies of target waypoint_rviz_plugin
+[ 91%] Building CXX object waypoint_rviz_plugin/CMakeFiles/waypoint_rviz_plugin.dir/waypoint_rviz_plugin_autogen/mocs_compilation.cpp.o
+[ 91%] Built target exploration_path
+[ 91%] Building CXX object waypoint_rviz_plugin/CMakeFiles/waypoint_rviz_plugin.dir/src/waypoint_tool.cpp.o
+[ 92%] Built target odom_visualization
+[ 93%] Built target pcl_render_node
+[ 93%] Built target control_example
+[ 93%] Built target so3_control_nodelet
+Scanning dependencies of target pointcloud_utils
+[ 94%] Building CXX object exploration_planner/CMakeFiles/pointcloud_utils.dir/src/utils/pointcloud_utils.cpp.o
+[ 94%] Linking CXX shared library /workspace/devel/lib/libwaypoint_rviz_plugin.so
+[ 94%] Built target waypoint_rviz_plugin
+Scanning dependencies of target pointcloud_manager
+[ 94%] Building CXX object exploration_planner/CMakeFiles/pointcloud_manager.dir/src/pointcloud_manager/pointcloud_manager.cpp.o
+[ 94%] Linking CXX shared library /workspace/devel/lib/libpointcloud_utils.so
+[ 94%] Built target pointcloud_utils
+Scanning dependencies of target viewpoint
+[ 94%] Building CXX object exploration_planner/CMakeFiles/viewpoint.dir/src/viewpoint/viewpoint.cpp.o
+[ 94%] Linking CXX shared library /workspace/devel/lib/libpointcloud_manager.so
+[ 94%] Built target pointcloud_manager
+[ 94%] Built target unitree_servo
+Scanning dependencies of target representation
+[ 95%] Building CXX object exploration_planner/CMakeFiles/representation.dir/src/representation/representation.cpp.o
+[ 96%] Linking CXX shared library /workspace/devel/lib/libviewpoint.so
+[ 96%] Built target viewpoint
+Scanning dependencies of target rolling_grid
+[ 96%] Building CXX object exploration_planner/CMakeFiles/rolling_grid.dir/src/rolling_grid/rolling_grid.cpp.o
+/workspace/src/exploration_planner/src/representation/representation.cpp: In member function ‘std::string representation_ns::Representation::ToJSON() const’:
+/workspace/src/exploration_planner/src/representation/representation.cpp:216:5: warning: no return statement in function returning non-void [-Wreturn-type]
+  216 |     }
+      |     ^
+[ 96%] Linking CXX shared library /workspace/devel/lib/librepresentation.so
+[ 96%] Built target representation
+Scanning dependencies of target room_segmentation
+[ 96%] Building CXX object exploration_planner/CMakeFiles/room_segmentation.dir/src/room_segmentation/room_segmentation.cpp.o
+[ 96%] Linking CXX shared library /workspace/devel/lib/librolling_grid.so
+[ 96%] Linking CXX executable /workspace/devel/lib/tare_planner/room_segmentation
+[ 96%] Built target room_segmentation
+[ 96%] Built target rolling_grid
+Scanning dependencies of target rolling_occupancy_grid
+[ 97%] Building CXX object exploration_planner/CMakeFiles/rolling_occupancy_grid.dir/src/rolling_occupancy_grid/rolling_occupancy_grid.cpp.o
+Scanning dependencies of target keypose_graph
+[ 97%] Building CXX object exploration_planner/CMakeFiles/keypose_graph.dir/src/keypose_graph/keypose_graph.cpp.o
+[ 97%] Linking CXX shared library /workspace/devel/lib/librolling_occupancy_grid.so
+[ 97%] Built target rolling_occupancy_grid
+[ 97%] Linking CXX static library /workspace/devel/lib/libkeypose_graph.a
+[ 97%] Built target keypose_graph
+Scanning dependencies of target viewpoint_manager
+[ 97%] Building CXX object exploration_planner/CMakeFiles/viewpoint_manager.dir/src/viewpoint_manager/viewpoint_manager.cpp.o
+[ 97%] Linking CXX static library /workspace/devel/lib/libviewpoint_manager.a
+[ 97%] Built target viewpoint_manager
+Scanning dependencies of target grid_world
+[ 97%] Building CXX object exploration_planner/CMakeFiles/grid_world.dir/src/grid_world/grid_world.cpp.o
+[ 97%] Linking CXX static library /workspace/devel/lib/libgrid_world.a
+[ 97%] Built target grid_world
+Scanning dependencies of target planning_env
+[ 97%] Building CXX object exploration_planner/CMakeFiles/planning_env.dir/src/planning_env/planning_env.cpp.o
+[ 97%] Linking CXX shared library /workspace/devel/lib/libplanning_env.so
+[ 97%] Built target planning_env
+Scanning dependencies of target tare_visualizer
+Scanning dependencies of target local_coverage_planner
+[ 98%] Building CXX object exploration_planner/CMakeFiles/tare_visualizer.dir/src/tare_visualizer/tare_visualizer.cpp.o
+[ 98%] Building CXX object exploration_planner/CMakeFiles/local_coverage_planner.dir/src/local_coverage_planner/local_coverage_planner.cpp.o
+[ 98%] Linking CXX shared library /workspace/devel/lib/libtare_visualizer.so
+[ 98%] Linking CXX shared library /workspace/devel/lib/liblocal_coverage_planner.so
+[ 98%] Built target tare_visualizer
+[ 98%] Built target local_coverage_planner
+Scanning dependencies of target sensor_coverage_planner_ground
+[100%] Building CXX object exploration_planner/CMakeFiles/sensor_coverage_planner_ground.dir/src/sensor_coverage_planner/sensor_coverage_planner_ground.cpp.o
+[100%] Linking CXX shared library /workspace/devel/lib/libsensor_coverage_planner_ground.so
+[100%] Built target sensor_coverage_planner_ground
+Scanning dependencies of target tare_planner_node
+[100%] Building CXX object exploration_planner/CMakeFiles/tare_planner_node.dir/src/tare_planner_node/tare_planner_node.cpp.o
+[100%] Linking CXX executable /workspace/devel/lib/tare_planner/tare_planner_node
+[100%] Built target tare_planner_node
+Base path: /workspace
+Source space: /workspace/src
+Build space: /workspace/build
+Devel space: /workspace/devel
+Install space: /workspace/install
+####
+#### Running command: "cmake /workspace/src -DLIBTORCH_PATH=/libtorch -DCATKIN_DEVEL_PREFIX=/workspace/devel -DCMAKE_INSTALL_PREFIX=/workspace/install -G Unix Makefiles" in "/workspace/build"
+####
+####
+#### Running command: "make -j2" in "/workspace/build"
+####

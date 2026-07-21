@@ -1,0 +1,8 @@
+<launch>
+  <arg name="use_sim_time" default="false" />
+  <param name="use_sim_time" value="$(arg use_sim_time)" />
+
+  <node pkg="semantic_mapping" type="semantic_mapping_node" name="semantic_mapping_node" output="screen">
+    <rosparam file="$(find semantic_mapping)/config/mapping_mecanum_sim.yaml" command="load" />
+  </node>
+</launch>

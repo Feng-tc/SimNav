@@ -1,0 +1,18 @@
+# 编译产物
+build/
+devel/
+
+# 运行时生成
+logs/
+generated_building/
+results/
+bags/
+__pycache__/
+*.pyc
+
+# rosbag
+*.bag
+
+# IDE
+.idea/
+.vscode/
