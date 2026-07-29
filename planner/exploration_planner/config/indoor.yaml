@@ -21,20 +21,27 @@ pub_exploring_phase_topic_: /exploring_phase
 
 # Planner behavior
 kAutoStart: true
+kPhaseArrivalDist: 1.0  # shared XY arrival threshold for phase 1/2/4/5 waypoints
+kMapClearingDist: 8.0  # /map_clearing radius on Phase1 first waypoint (match terrain_analysis)
 kUsePhase1Door: true
 kMainEntranceDoorId: "main_entrance"
+
 kPhase1Waypoint: [0.0, 4.0, 0.6]
-kPhase1ArrivalDist: 1.0
+kPhase2Waypoint: [0.0, 30.0, 0.6]
+kPhase4_1Waypoint: [0.0, 2.5, 0.6]
+kPhase4_2Waypoint: [2.2, 2.5, 0.6]
+kPhase4_3Waypoint: [0.0, 2.5, 2.9]
+kPhase5Waypoint: [0.0, 30.0, 2.9]
+
 kPhase1LookaheadDist: 2.5
 kUsePhase2Waypoint: true
-kPhase2Waypoint: [0.0, 30.0, 0.6]
-kPhase2ArrivalDist: 1.0
+
 kUsePhase4: true
 kPhase4NoRoomCycles: 3
 kPhase4ElevatorId: "elevator_main"
-kPhase4ElevatorDoorId: "elevator_floor_0"
-kPhase4ElevatorTargetFloor: 0
-kPhase4Waypoint: [0.0, 3.0, 0.6]
+
+kUsePhase5Waypoint: true
+
 kRushHome: true
 kUseTerrainHeight: false
 kCheckTerrainCollision: true

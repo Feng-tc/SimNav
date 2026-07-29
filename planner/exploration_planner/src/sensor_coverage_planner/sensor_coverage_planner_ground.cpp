@@ -13,6 +13,7 @@
 #include "graph/graph.h"
 #include <limits>
 #include <memory>
+#include <string>
 #include <unordered_map>
 #include <vector>
 #include <tf2/LinearMath/Matrix3x3.h>
@@ -53,6 +54,8 @@ void SensorCoveragePlanner3D::ReadParameters() {
   private_nh_.param("kUsePhase2Waypoint", kUsePhase2Waypoint, false);
   private_nh_.param("kUsePhase1Door", kUsePhase1Door, false);
   private_nh_.param<std::string>("kMainEntranceDoorId", kMainEntranceDoorId, "main_entrance");
+  private_nh_.param("kPhaseArrivalDist", kPhaseArrivalDist, 1.0);
+  private_nh_.param("kMapClearingDist", kMapClearingDist, 8.0);
   private_nh_.param<std::string>("kTargetObject", kTargetObject, "");
 
   private_nh_.param("kKeyposeCloudDwzFilterLeafSize", kKeyposeCloudDwzFilterLeafSize, 0.2);
@@ -78,7 +81,6 @@ void SensorCoveragePlanner3D::ReadParameters() {
       ROS_WARN("kPhase2Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
     }
   }
-  private_nh_.param("kPhase2ArrivalDist", kPhase2ArrivalDist, 1.0);
 
   std::vector<double> phase1_waypoint_param;
   if (private_nh_.getParam("kPhase1Waypoint", phase1_waypoint_param) &&
@@ -94,31 +96,72 @@ void SensorCoveragePlanner3D::ReadParameters() {
       ROS_WARN("kPhase1Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
     }
   }
-  private_nh_.param("kPhase1ArrivalDist", kPhase1ArrivalDist, 1.0);
   private_nh_.param("kPhase1LookaheadDist", kPhase1LookaheadDist, 2.5);
 
   private_nh_.param("kUsePhase4", kUsePhase4, false);
   private_nh_.param("kPhase4NoRoomCycles", kPhase4NoRoomCycles, 3);
   private_nh_.param<std::string>("kPhase4ElevatorId", kPhase4ElevatorId, "elevator_main");
-  private_nh_.param<std::string>("kPhase4ElevatorDoorId", kPhase4ElevatorDoorId, "elevator_floor_0");
-  private_nh_.param("kPhase4ElevatorTargetFloor", kPhase4ElevatorTargetFloor, 0);
-  std::vector<double> phase4_waypoint_param;
-  if (private_nh_.getParam("kPhase4Waypoint", phase4_waypoint_param) &&
-      phase4_waypoint_param.size() >= 3) {
-    kPhase4WaypointX = phase4_waypoint_param[0];
-    kPhase4WaypointY = phase4_waypoint_param[1];
-    kPhase4WaypointZ = phase4_waypoint_param[2];
+  std::vector<double> phase4_1_waypoint_param;
+  if (private_nh_.getParam("kPhase4_1Waypoint", phase4_1_waypoint_param) &&
+      phase4_1_waypoint_param.size() >= 3) {
+    kPhase4_1WaypointX = phase4_1_waypoint_param[0];
+    kPhase4_1WaypointY = phase4_1_waypoint_param[1];
+    kPhase4_1WaypointZ = phase4_1_waypoint_param[2];
   } else {
-    private_nh_.param("kPhase4WaypointX", kPhase4WaypointX, 0.0);
-    private_nh_.param("kPhase4WaypointY", kPhase4WaypointY, 4.0);
-    private_nh_.param("kPhase4WaypointZ", kPhase4WaypointZ, 0.6);
-    if (private_nh_.hasParam("kPhase4Waypoint")) {
-      ROS_WARN("kPhase4Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
+    private_nh_.param("kPhase4_1WaypointX", kPhase4_1WaypointX, 0.0);
+    private_nh_.param("kPhase4_1WaypointY", kPhase4_1WaypointY, 2.5);
+    private_nh_.param("kPhase4_1WaypointZ", kPhase4_1WaypointZ, 0.6);
+    if (private_nh_.hasParam("kPhase4_1Waypoint")) {
+      ROS_WARN("kPhase4_1Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
+    }
+  }
+  std::vector<double> phase4_2_waypoint_param;
+  if (private_nh_.getParam("kPhase4_2Waypoint", phase4_2_waypoint_param) &&
+      phase4_2_waypoint_param.size() >= 3) {
+    kPhase4_2WaypointX = phase4_2_waypoint_param[0];
+    kPhase4_2WaypointY = phase4_2_waypoint_param[1];
+    kPhase4_2WaypointZ = phase4_2_waypoint_param[2];
+  } else {
+    private_nh_.param("kPhase4_2WaypointX", kPhase4_2WaypointX, 2.0);
+    private_nh_.param("kPhase4_2WaypointY", kPhase4_2WaypointY, 2.5);
+    private_nh_.param("kPhase4_2WaypointZ", kPhase4_2WaypointZ, 0.6);
+    if (private_nh_.hasParam("kPhase4_2Waypoint")) {
+      ROS_WARN("kPhase4_2Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
+    }
+  }
+  std::vector<double> phase4_3_waypoint_param;
+  if (private_nh_.getParam("kPhase4_3Waypoint", phase4_3_waypoint_param) &&
+      phase4_3_waypoint_param.size() >= 3) {
+    kPhase4_3WaypointX = phase4_3_waypoint_param[0];
+    kPhase4_3WaypointY = phase4_3_waypoint_param[1];
+    kPhase4_3WaypointZ = phase4_3_waypoint_param[2];
+  } else {
+    private_nh_.param("kPhase4_3WaypointX", kPhase4_3WaypointX, 0.0);
+    private_nh_.param("kPhase4_3WaypointY", kPhase4_3WaypointY, 2.5);
+    private_nh_.param("kPhase4_3WaypointZ", kPhase4_3WaypointZ, 3.2);
+    if (private_nh_.hasParam("kPhase4_3Waypoint")) {
+      ROS_WARN("kPhase4_3Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
     }
   }
   if (kPhase4NoRoomCycles < 1) {
     ROS_WARN("kPhase4NoRoomCycles must be >= 1, resetting to 1");
     kPhase4NoRoomCycles = 1;
+  }
+
+  private_nh_.param("kUsePhase5Waypoint", kUsePhase5Waypoint, false);
+  std::vector<double> phase5_waypoint_param;
+  if (private_nh_.getParam("kPhase5Waypoint", phase5_waypoint_param) &&
+      phase5_waypoint_param.size() >= 3) {
+    kPhase5WaypointX = phase5_waypoint_param[0];
+    kPhase5WaypointY = phase5_waypoint_param[1];
+    kPhase5WaypointZ = phase5_waypoint_param[2];
+  } else {
+    private_nh_.param("kPhase5WaypointX", kPhase5WaypointX, 0.0);
+    private_nh_.param("kPhase5WaypointY", kPhase5WaypointY, 30.0);
+    private_nh_.param("kPhase5WaypointZ", kPhase5WaypointZ, 3.0);
+    if (private_nh_.hasParam("kPhase5Waypoint")) {
+      ROS_WARN("kPhase5Waypoint must have at least 3 elements [x, y, z]; using X/Y/Z fallback");
+    }
   }
 
   private_nh_.param("kWaypointPlanningScanInterval", kWaypointPlanningScanInterval, 5);
@@ -401,15 +444,24 @@ void SensorCoveragePlanner3D::InitializeData() {
   phase4_waypoint_.x = 0.0;
   phase4_waypoint_.y = 0.0;
   phase4_waypoint_.z = 0.0;
+  phase5_waypoint_.x = 0.0;
+  phase5_waypoint_.y = 0.0;
+  phase5_waypoint_.z = 0.0;
   phase1_door_opened_ = false;
+  phase1_pointcloud_reset_ = false;
+  phase5_arrived_ = false;
   phase4_elevator_ready_ = false;
+  phase4_step_ = 0;
+  phase4_ride_requested_ = false;
   no_unexplored_room_counter_ = 0;
 }
 
 SensorCoveragePlanner3D::SensorCoveragePlanner3D(ros::NodeHandle& nh, ros::NodeHandle& private_nh)
     : nh_(nh), private_nh_(private_nh), keypose_cloud_update_(false),
       initialized_(false), exploringPhase_(1), phase1_door_opened_(false),
-      phase4_elevator_ready_(false), no_unexplored_room_counter_(0),
+      phase5_arrived_(false),
+      phase4_elevator_ready_(false), phase4_step_(0), phase4_ride_requested_(false),
+      no_unexplored_room_counter_(0),
       lookahead_point_update_(false), relocation_(false),
       start_exploration_(false), exploration_finished_(false),
       near_home_(false), at_home_(false), stopped_(false),
@@ -430,28 +482,38 @@ bool SensorCoveragePlanner3D::initialize() {
     ROS_INFO("Target object set from parameter: %s (kUseVlm=%d)", target_object_.c_str(), kUseVlm);
   }
   if (kUsePhase1Door) {
-    ROS_INFO("Phase1 door entry enabled: door_id=%s, waypoint [%.2f, %.2f, %.2f], arrival dist %.2f",
+    ROS_INFO("Phase1 door entry enabled: door_id=%s, waypoint [%.2f, %.2f, %.2f], arrival dist %.2f%s",
              kMainEntranceDoorId.c_str(), kPhase1WaypointX, kPhase1WaypointY, kPhase1WaypointZ,
-             kPhase1ArrivalDist);
+             kPhaseArrivalDist, kUsePhase4 ? " (also preps elevator at ground floor)" : "");
     set_door_state_client_ =
         nh_.serviceClient<building_generator_interfaces::SetDoorState>("/set_door_state");
   }
   if (kUsePhase2Waypoint) {
     ROS_INFO("Phase2 waypoint enabled: [%.2f, %.2f, %.2f], arrival dist %.2f",
              kPhase2WaypointX, kPhase2WaypointY, kPhase2WaypointZ,
-             kPhase2ArrivalDist);
+             kPhaseArrivalDist);
   }
   if (kUsePhase4) {
-    ROS_INFO("Phase4 elevator enabled: elevator=%s, door=%s, floor=%d, waypoint [%.2f, %.2f, %.2f], no-room cycles=%d",
-             kPhase4ElevatorId.c_str(), kPhase4ElevatorDoorId.c_str(),
-             kPhase4ElevatorTargetFloor, kPhase4WaypointX, kPhase4WaypointY,
-             kPhase4WaypointZ, kPhase4NoRoomCycles);
+    ROS_INFO(
+        "Phase4 elevator enabled: elevator=%s, served_floors=%d, target_floor=%d, "
+        "wp1 [%.2f, %.2f, %.2f], wp2 [%.2f, %.2f, %.2f], wp3 [%.2f, %.2f, %.2f], "
+        "arrival dist %.2f, no-room cycles=%d",
+        kPhase4ElevatorId.c_str(), kPhase4ServedFloorCount, kPhase4ElevatorTargetFloor,
+        kPhase4_1WaypointX, kPhase4_1WaypointY, kPhase4_1WaypointZ,
+        kPhase4_2WaypointX, kPhase4_2WaypointY, kPhase4_2WaypointZ,
+        kPhase4_3WaypointX, kPhase4_3WaypointY, kPhase4_3WaypointZ,
+        kPhaseArrivalDist, kPhase4NoRoomCycles);
     if (!set_door_state_client_.exists()) {
       set_door_state_client_ =
           nh_.serviceClient<building_generator_interfaces::SetDoorState>("/set_door_state");
     }
     call_elevator_client_ =
         nh_.serviceClient<building_generator_interfaces::CallElevator>("/call_elevator");
+  }
+  if (kUsePhase5Waypoint) {
+    ROS_INFO("Phase5 waypoint enabled: [%.2f, %.2f, %.2f], arrival dist %.2f",
+             kPhase5WaypointX, kPhase5WaypointY, kPhase5WaypointZ,
+             kPhaseArrivalDist);
   }
   InitializeData();
 
@@ -517,6 +579,7 @@ bool SensorCoveragePlanner3D::initialize() {
       pub_momentum_activation_count_topic_, 2);
   exploring_phase_pub_ = nh_.advertise<std_msgs::Int32>(
       pub_exploring_phase_topic_, 1, true);
+  map_clearing_pub_ = nh_.advertise<std_msgs::Float32>("/map_clearing", 1);
   pointcloud_manager_neighbor_cells_origin_pub_ =
       nh_.advertise<geometry_msgs::PointStamped>(
           "pointcloud_manager_neighbor_cells_origin", 1);
@@ -2014,6 +2077,15 @@ void SensorCoveragePlanner3D::PublishPhase2Waypoint()
   misc_utils_ns::Publish(&nh_, waypoint_pub_, waypoint, kWorldFrameID);
 }
 
+void SensorCoveragePlanner3D::PublishPhase5Waypoint()
+{
+  geometry_msgs::PointStamped waypoint;
+  waypoint.header.frame_id = kWorldFrameID;
+  waypoint.header.stamp = ros::Time::now();
+  waypoint.point = phase5_waypoint_;
+  misc_utils_ns::Publish(&nh_, waypoint_pub_, waypoint, kWorldFrameID);
+}
+
 void SensorCoveragePlanner3D::PublishPhase4Waypoint()
 {
   geometry_msgs::PointStamped waypoint;
@@ -2025,6 +2097,15 @@ void SensorCoveragePlanner3D::PublishPhase4Waypoint()
 
 void SensorCoveragePlanner3D::PublishPhase1Waypoint()
 {
+  if (!phase1_pointcloud_reset_) {
+    std_msgs::Float32 clearing_msg;
+    clearing_msg.data = static_cast<float>(kMapClearingDist);
+    map_clearing_pub_.publish(clearing_msg);
+    ROS_INFO("Phase1 first waypoint: published /map_clearing (dist=%.1f m)",
+             kMapClearingDist);
+    phase1_pointcloud_reset_ = true;
+  }
+
   const double dx = phase1_waypoint_.x - robot_position_.x;
   const double dy = phase1_waypoint_.y - robot_position_.y;
   const double dist = std::hypot(dx, dy);
@@ -2064,7 +2145,8 @@ bool SensorCoveragePlanner3D::SetMainEntranceDoor(bool open, double service_wait
   return false;
 }
 
-bool SensorCoveragePlanner3D::SetElevatorDoor(bool open, double service_wait_timeout)
+bool SensorCoveragePlanner3D::SetElevatorDoorById(const std::string& door_id, bool open,
+                                                    double service_wait_timeout)
 {
   if (!set_door_state_client_.exists()) {
     if (!ros::service::waitForService("/set_door_state", service_wait_timeout)) {
@@ -2076,20 +2158,37 @@ bool SensorCoveragePlanner3D::SetElevatorDoor(bool open, double service_wait_tim
   }
 
   building_generator_interfaces::SetDoorState srv;
-  srv.request.door_id = kPhase4ElevatorDoorId;
+  srv.request.door_id = door_id;
   srv.request.open = open;
   if (!set_door_state_client_.call(srv)) {
-    ROS_WARN("set_door_state service call failed for elevator door");
+    ROS_WARN("set_door_state service call failed for elevator door \"%s\"", door_id.c_str());
     return false;
   }
   if (srv.response.accepted) {
-    ROS_INFO("Elevator door \"%s\" %s", kPhase4ElevatorDoorId.c_str(),
-             open ? "opened" : "closed");
+    ROS_INFO("Elevator door \"%s\" %s", door_id.c_str(), open ? "opened" : "closed");
     return true;
   }
-  ROS_WARN("Elevator door \"%s\" %s rejected: %s", kPhase4ElevatorDoorId.c_str(),
+  ROS_WARN("Elevator door \"%s\" %s rejected: %s", door_id.c_str(),
            open ? "open" : "close", srv.response.message.c_str());
   return false;
+}
+
+bool SensorCoveragePlanner3D::SetElevatorDoor(bool open, double service_wait_timeout)
+{
+  return SetElevatorDoorById(kPhase4ElevatorDoorId, open, service_wait_timeout);
+}
+
+bool SensorCoveragePlanner3D::OpenAllElevatorDoors(double service_wait_timeout)
+{
+  for (int i = 0; i < kPhase4ServedFloorCount; ++i) {
+    const std::string door_id = "elevator_floor_" + std::to_string(i);
+    if (!SetElevatorDoorById(door_id, true, service_wait_timeout)) {
+      return false;
+    }
+  }
+  ROS_INFO("Opened all %d elevator doors (elevator_floor_0 .. elevator_floor_%d)",
+           kPhase4ServedFloorCount, kPhase4ServedFloorCount - 1);
+  return true;
 }
 
 bool SensorCoveragePlanner3D::CallElevatorToFloor(int floor, bool open_doors,
@@ -2128,32 +2227,114 @@ bool SensorCoveragePlanner3D::TrySetupPhase4Elevator()
   if (phase4_elevator_ready_) {
     return true;
   }
-  const bool door_ok = SetElevatorDoor(true, 5.0);
-  const bool elevator_ok =
-      CallElevatorToFloor(kPhase4ElevatorTargetFloor, true, 30.0);
-  if (door_ok && elevator_ok) {
+  const bool doors_ok = OpenAllElevatorDoors(5.0);
+  const bool elevator_ok = CallElevatorToFloor(0, true, 30.0);
+  if (doors_ok && elevator_ok) {
     phase4_elevator_ready_ = true;
   }
   return phase4_elevator_ready_;
+}
+
+bool SensorCoveragePlanner3D::TryOpenPhase1Entry(double service_wait_timeout)
+{
+  if (!SetMainEntranceDoor(true, service_wait_timeout)) {
+    return false;
+  }
+  if (kUsePhase4 && !TrySetupPhase4Elevator()) {
+    return false;
+  }
+  return true;
 }
 
 void SensorCoveragePlanner3D::InitPhase4()
 {
   exploringPhase_ = 4;
   no_unexplored_room_counter_ = 0;
-  phase4_elevator_ready_ = false;
+  phase4_ride_requested_ = false;
   transit_across_room_ = false;
 
-  phase4_waypoint_.x = kPhase4WaypointX;
-  phase4_waypoint_.y = kPhase4WaypointY;
-  phase4_waypoint_.z = kPhase4WaypointZ;
+  phase4_waypoint_.x = kPhase4_1WaypointX;
+  phase4_waypoint_.y = kPhase4_1WaypointY;
+  phase4_waypoint_.z = kPhase4_1WaypointZ;
 
-  TrySetupPhase4Elevator();
+  if (phase4_elevator_ready_) {
+    phase4_step_ = 1;
+    ROS_INFO(
+        "exploringPhase -> 4 (elevator ready from Phase1), step 1 wp1 [%.2f, %.2f, %.2f], "
+        "wp2 [%.2f, %.2f, %.2f], wp3 [%.2f, %.2f, %.2f], target floor %d",
+        kPhase4_1WaypointX, kPhase4_1WaypointY, kPhase4_1WaypointZ,
+        kPhase4_2WaypointX, kPhase4_2WaypointY, kPhase4_2WaypointZ,
+        kPhase4_3WaypointX, kPhase4_3WaypointY, kPhase4_3WaypointZ,
+        kPhase4ElevatorTargetFloor);
+    PublishPhase4Waypoint();
+  } else {
+    phase4_step_ = 0;
+    ROS_INFO(
+        "exploringPhase -> 4, wp1 [%.2f, %.2f, %.2f], wp2 [%.2f, %.2f, %.2f], "
+        "wp3 [%.2f, %.2f, %.2f], target floor %d",
+        kPhase4_1WaypointX, kPhase4_1WaypointY, kPhase4_1WaypointZ,
+        kPhase4_2WaypointX, kPhase4_2WaypointY, kPhase4_2WaypointZ,
+        kPhase4_3WaypointX, kPhase4_3WaypointY, kPhase4_3WaypointZ,
+        kPhase4ElevatorTargetFloor);
+  }
+}
 
-  ROS_INFO("exploringPhase -> 4, target [%.2f, %.2f, %.2f], elevator floor %d",
-           phase4_waypoint_.x, phase4_waypoint_.y, phase4_waypoint_.z,
-           kPhase4ElevatorTargetFloor);
-  PublishPhase4Waypoint();
+void SensorCoveragePlanner3D::InitPhase5()
+{
+  exploringPhase_ = 5;
+  phase5_arrived_ = false;
+  phase5_waypoint_.x = kPhase5WaypointX;
+  phase5_waypoint_.y = kPhase5WaypointY;
+  phase5_waypoint_.z = kPhase5WaypointZ;
+  ROS_INFO("exploringPhase -> 5, target [%.2f, %.2f, %.2f]",
+           phase5_waypoint_.x, phase5_waypoint_.y, phase5_waypoint_.z);
+  PublishPhase5Waypoint();
+}
+
+bool SensorCoveragePlanner3D::IsRoomExplorationPhase() const
+{
+  return exploringPhase_ == 3 || exploringPhase_ == 6;
+}
+
+void SensorCoveragePlanner3D::InitPhase6()
+{
+  exploringPhase_ = 6;
+  enter_wrong_room_ = false;
+  viewpoint_manager_->SetEnterWrongRoom(false);
+  local_coverage_planner_->SetEnterWrongRoom(false);
+
+  Eigen::Vector3f robot_position_tmp(
+      robot_position_.x, robot_position_.y, robot_position_.z);
+  Eigen::Vector3i robot_position_voxel = misc_utils_ns::point_to_voxel(
+      robot_position_tmp, shift_, 1.0 / room_resolution_);
+
+  if (robot_position_voxel.x() >= 0 &&
+      robot_position_voxel.x() < room_mask_.rows &&
+      robot_position_voxel.y() >= 0 &&
+      robot_position_voxel.y() < room_mask_.cols) {
+    const int room_id =
+        room_mask_.at<int>(robot_position_voxel.x(), robot_position_voxel.y());
+    if (room_id > 0) {
+      current_room_id_ = room_id;
+      if (representation_->HasRoomNode(current_room_id_)) {
+        representation_->GetRoomNode(current_room_id_).SetIsVisited(true);
+      }
+      ROS_INFO("exploringPhase -> 6, accepted room %d at (%.2f, %.2f), starting 2F exploration",
+               current_room_id_, robot_position_.x, robot_position_.y);
+    } else {
+      current_room_id_ = -1;
+      ROS_WARN("exploringPhase -> 6, robot not in any room (mask id=%d), starting 2F exploration",
+               room_id);
+    }
+  } else {
+    current_room_id_ = -1;
+    ROS_WARN("exploringPhase -> 6, robot position out of room mask bounds, starting 2F exploration");
+  }
+
+  robot_position_old_ = robot_position_;
+  room_mask_old_ = room_mask_.clone();
+  viewpoint_manager_->SetCurrentRoomId(current_room_id_);
+  grid_world_->SetCurrentRoomId(current_room_id_);
 }
 
 void SensorCoveragePlanner3D::InitPhase2()
@@ -2183,17 +2364,20 @@ void SensorCoveragePlanner3D::AdvanceFromPhase1()
     phase1_waypoint_.x = kPhase1WaypointX;
     phase1_waypoint_.y = kPhase1WaypointY;
     phase1_waypoint_.z = kPhase1WaypointZ;
-    if (SetMainEntranceDoor(true, 30.0)) {
+    if (TryOpenPhase1Entry(30.0)) {
       phase1_door_opened_ = true;
       PublishPhase1Waypoint();
-      ROS_INFO("exploringPhase=1, door open, target [%.2f, %.2f, %.2f]",
+      ROS_INFO("exploringPhase=1, entry open%s, target [%.2f, %.2f, %.2f]",
+               kUsePhase4 ? " (main door + elevator prep)" : "",
                phase1_waypoint_.x, phase1_waypoint_.y, phase1_waypoint_.z);
     } else {
-      ROS_WARN("exploringPhase=1, waiting for main entrance door to open before moving");
+      ROS_WARN("exploringPhase=1, waiting for main entrance door%s before moving",
+               kUsePhase4 ? " and elevator setup" : "");
     }
     return;
   }
-  InitPhase2();
+  // InitPhase2();  // TEST: skip phase 2/3
+  InitPhase4();
 }
 
 void SensorCoveragePlanner3D::SendInitialWaypoint()
@@ -2215,7 +2399,7 @@ void SensorCoveragePlanner3D::SendInitialWaypoint()
 
 void SensorCoveragePlanner3D::SendInRoomWaypoint()
 {
-  if (exploringPhase_ != 3) {
+  if (!IsRoomExplorationPhase()) {
     return;
   }
   double distance = 2.5 + room_guide_counter_ * 1.0; // distance to the waypoint
@@ -3478,11 +3662,15 @@ void SensorCoveragePlanner3D::PublishWaypoint() {
     PublishPhase2Waypoint();
     return;
   }
+  if (exploringPhase_ == 5) {
+    PublishPhase5Waypoint();
+    return;
+  }
   if (exploringPhase_ == 4) {
     PublishPhase4Waypoint();
     return;
   }
-  if (exploringPhase_ != 3) {
+  if (!IsRoomExplorationPhase()) {
     return;
   }
   geometry_msgs::PointStamped waypoint;
@@ -3722,24 +3910,27 @@ void SensorCoveragePlanner3D::execute() {
       keypose_cloud_update_ = false;
     }
     if (!phase1_door_opened_) {
-      if (SetMainEntranceDoor(true, 5.0)) {
+      if (TryOpenPhase1Entry(5.0)) {
         phase1_door_opened_ = true;
       } else {
-        ROS_WARN_THROTTLE(2.0, "Phase1: waiting for main entrance door to open");
+        ROS_WARN_THROTTLE(2.0, "Phase1: waiting for main entrance door%s",
+                          kUsePhase4 ? " and elevator setup" : "");
         return;
       }
     }
     PublishPhase1Waypoint();
     const double dist_to_phase1_waypoint =
         misc_utils_ns::PointXYDist(robot_position_, phase1_waypoint_);
-    if (dist_to_phase1_waypoint < kPhase1ArrivalDist) {
+    if (dist_to_phase1_waypoint < kPhaseArrivalDist) {
       SetMainEntranceDoor(false);
       phase1_door_opened_ = false;
-      InitPhase2();
+      // InitPhase2();  // TEST: skip phase 2/3
+      InitPhase4();
     }
     return;
   }
 
+#if 0  // TEST: phase 2 disabled — skip to phase 4 after phase 1
   if (exploringPhase_ == 2) {
     ProcessObjectNodes();
     if (keypose_cloud_update_) {
@@ -3753,7 +3944,7 @@ void SensorCoveragePlanner3D::execute() {
     PublishPhase2Waypoint();
     const double dist_to_phase2_waypoint =
         misc_utils_ns::PointXYDist(robot_position_, phase2_waypoint_);
-    if (dist_to_phase2_waypoint < kPhase2ArrivalDist) {
+    if (dist_to_phase2_waypoint < kPhaseArrivalDist) {
       exploringPhase_ = 3;
 
       enter_wrong_room_ = false;
@@ -3798,16 +3989,141 @@ void SensorCoveragePlanner3D::execute() {
     }
     return;
   }
+#endif
 
   if (exploringPhase_ == 4) {
-    if (kUsePhase4 && !phase4_elevator_ready_) {
-      TrySetupPhase4Elevator();
+    if (!kUsePhase4) {
+      return;
     }
-    PublishPhase4Waypoint();
+    switch (phase4_step_) {
+      case 0: {
+        if (phase4_elevator_ready_) {
+          phase4_step_ = 1;
+          ROS_INFO("Phase4 step 1: approach outside waypoint [%.2f, %.2f, %.2f]",
+                   phase4_waypoint_.x, phase4_waypoint_.y, phase4_waypoint_.z);
+          PublishPhase4Waypoint();
+          break;
+        }
+        if (TrySetupPhase4Elevator()) {
+          phase4_step_ = 1;
+          phase4_waypoint_.x = kPhase4_1WaypointX;
+          phase4_waypoint_.y = kPhase4_1WaypointY;
+          phase4_waypoint_.z = kPhase4_1WaypointZ;
+          ROS_INFO("Phase4 step 1 (fallback setup): approach outside waypoint [%.2f, %.2f, %.2f]",
+                   phase4_waypoint_.x, phase4_waypoint_.y, phase4_waypoint_.z);
+          PublishPhase4Waypoint();
+        } else {
+          ROS_WARN_THROTTLE(2.0,
+                            "Phase4 step 0 (fallback): waiting for elevator setup (all doors + floor 0)");
+        }
+        break;
+      }
+      case 1: {
+        PublishPhase4Waypoint();
+        const double dist_outside =
+            misc_utils_ns::PointXYDist(robot_position_, phase4_waypoint_);
+        if (dist_outside < kPhaseArrivalDist) {
+          phase4_step_ = 2;
+          phase4_waypoint_.x = kPhase4_2WaypointX;
+          phase4_waypoint_.y = kPhase4_2WaypointY;
+          phase4_waypoint_.z = kPhase4_2WaypointZ;
+          ROS_INFO("Phase4 step 2: enter car waypoint [%.2f, %.2f, %.2f]",
+                   phase4_waypoint_.x, phase4_waypoint_.y, phase4_waypoint_.z);
+        }
+        break;
+      }
+      case 2: {
+        PublishPhase4Waypoint();
+        const double dist_inside =
+            misc_utils_ns::PointXYDist(robot_position_, phase4_waypoint_);
+        if (dist_inside < kPhaseArrivalDist) {
+          phase4_step_ = 3;
+          ROS_INFO("Phase4 step 3: calling elevator to floor %d",
+                   kPhase4ElevatorTargetFloor);
+        }
+        break;
+      }
+      case 3: {
+        PublishPhase4Waypoint();
+        if (!phase4_ride_requested_) {
+          if (CallElevatorToFloor(kPhase4ElevatorTargetFloor, true, 30.0)) {
+            phase4_ride_requested_ = true;
+            phase4_step_ = 4;
+            ROS_INFO("Phase4 step 3: elevator called to floor %d, waiting for arrival",
+                     kPhase4ElevatorTargetFloor);
+          } else {
+            ROS_WARN_THROTTLE(2.0, "Phase4 step 3: waiting to call elevator to floor %d",
+                              kPhase4ElevatorTargetFloor);
+          }
+        }
+        break;
+      }
+      case 4: {
+        const double floor2_z_threshold = kPhase4_3WaypointZ - 0.5;
+        if (robot_position_.z >= floor2_z_threshold) {
+          phase4_step_ = 5;
+          phase4_waypoint_.x = kPhase4_3WaypointX;
+          phase4_waypoint_.y = kPhase4_3WaypointY;
+          phase4_waypoint_.z = kPhase4_3WaypointZ;
+          ROS_INFO("Phase4 step 4: elevator at floor 2 (z=%.2f), goto [%.2f, %.2f, %.2f]",
+                   robot_position_.z, phase4_waypoint_.x, phase4_waypoint_.y,
+                   phase4_waypoint_.z);
+          PublishPhase4Waypoint();
+        } else {
+          ROS_WARN_THROTTLE(2.0,
+                            "Phase4 step 4: waiting for elevator at floor 2 (robot z=%.2f, need >= %.2f)",
+                            robot_position_.z, floor2_z_threshold);
+        }
+        break;
+      }
+      case 5: {
+        PublishPhase4Waypoint();
+        const double dist_floor2_exit =
+            misc_utils_ns::PointXYDist(robot_position_, phase4_waypoint_);
+        if (dist_floor2_exit < kPhaseArrivalDist) {
+          ROS_INFO("Phase4: arrived at floor-2 exit waypoint [%.2f, %.2f, %.2f]",
+                   phase4_waypoint_.x, phase4_waypoint_.y, phase4_waypoint_.z);
+          if (kUsePhase5Waypoint) {
+            InitPhase5();
+          } else {
+            phase4_step_ = 6;
+            ROS_INFO("Phase4 complete");
+          }
+        }
+        break;
+      }
+      case 6:
+      default:
+        break;
+    }
     return;
   }
 
-  if (exploringPhase_ != 3) {
+  if (exploringPhase_ == 5) {
+    ProcessObjectNodes();
+    if (keypose_cloud_update_) {
+      keypose_cloud_update_ = false;
+      UpdateRoomLabel();
+      SetCurrentRoomId();
+      UpdateGlobalRepresentation();
+      UpdateViewPoints();
+      UpdateKeyposeGraph();
+    }
+    PublishPhase5Waypoint();
+    if (!phase5_arrived_) {
+      const double dist_to_phase5_waypoint =
+          misc_utils_ns::PointXYDist(robot_position_, phase5_waypoint_);
+      if (dist_to_phase5_waypoint < kPhaseArrivalDist) {
+        phase5_arrived_ = true;
+        ROS_INFO("Phase5 complete: arrived at [%.2f, %.2f, %.2f]",
+                 phase5_waypoint_.x, phase5_waypoint_.y, phase5_waypoint_.z);
+        InitPhase6();
+      }
+    }
+    return;
+  }
+
+  if (!IsRoomExplorationPhase()) {
     return;
   }
 
@@ -4650,7 +4966,7 @@ void SensorCoveragePlanner3D::CheckObjectFound()
     ROS_ERROR("Planner not initialized, cannot check object found");
     return;
   }
-  if (exploringPhase_ != 3) {
+  if (!IsRoomExplorationPhase()) {
     return;
   }
 

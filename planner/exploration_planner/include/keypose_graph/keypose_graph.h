@@ -142,6 +142,7 @@ public:
   {
     allow_vertical_edge_ = allow_vertical_edge;
   }
+  void Reset();
   bool IsPositionReachable(const geometry_msgs::Point& point, double dist_threshold);
   bool IsPositionReachable(const geometry_msgs::Point& point);
   int GetClosestNodeInd(const geometry_msgs::Point& point);

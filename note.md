@@ -135,11 +135,11 @@ source /workspace/devel/setup.bash
 
 
 
-| 终端  | 作用                                     |
-| --- | -------------------------------------- |
-| 1   | 仿真 + 控制器（`auto.sh`）                    |
-| 2   | 局部规划，不开 RViz（`local_planner`）          |
-| 3   | TARE 探索 + RViz（`tare_planner`，唯一可视化窗口） |
+| 终端  | 作用                             |
+| --- | ------------------------------ |
+| 1   | 仿真 + 控制器（`auto.sh`）            |
+| 2   | 局部规划，不开 RViz（`local_planner`）  |
+| 3   | TARE 探索 + RViz（`tare_planner`） |
 
 
 
@@ -173,6 +173,8 @@ roslaunch tare_planner tare_planner_indoor.launch
 
 ---
 
+
+
 ## 6. Rosbag 录制（RealSense RGB + 深度 + 位姿）
 
 录制前需开启 RealSense（例如 `ENABLE_SENSOR_DATA=0 ENABLE_REALSENSE=1 ./auto.sh`）。在容器内、已 `source` ROS 和 devel 后执行：
@@ -190,16 +192,4 @@ rosbag record -O /workspace/bags/robot_sensors_$(date +%Y%m%d_%H%M%S) \
 ```
 
 用 **Ctrl+C** 结束录制，bag 保存在 `/workspace/bags/`（宿主机 `~/_SimNav/bags/`）。
-
----
-
-## 流程速查
-
-```text
-宿主机:  xhost +local:docker → docker start simenv → docker exec -it simenv bash
-容器:    export 环境变量 → source ROS + devel
-终端 1:  ./auto.sh → 2 → 6（退出后执行: pkill -f gzserver; pkill -f gzclient）
-终端 2:  roslaunch local_planner system_indoor_base.launch
-终端 3:  roslaunch tare_planner tare_planner_indoor.launch
-```
 

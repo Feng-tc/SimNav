@@ -54,6 +54,22 @@ void KeyposeGraph::ReadParameters(ros::NodeHandle* nh)
   nh->param("keypose_graph/kAddEdgeCollisionCheckPointNumThr", kAddEdgeCollisionCheckPointNumThr, kAddEdgeCollisionCheckPointNumThr);
 }
 
+void KeyposeGraph::Reset()
+{
+  nodes_.clear();
+  graph_.clear();
+  dist_.clear();
+  node_positions_.clear();
+  in_local_planning_horizon_.clear();
+  connected_node_indices_.clear();
+  connected_nodes_cloud_->clear();
+  nodes_cloud_->clear();
+  current_keypose_id_ = 0;
+  current_keypose_position_.x = 0.0;
+  current_keypose_position_.y = 0.0;
+  current_keypose_position_.z = 0.0;
+}
+
 void KeyposeGraph::AddNode(const geometry_msgs::Point& position, int node_ind, int keypose_id, bool is_keypose)
 {
   KeyposeNode new_node(position, node_ind, keypose_id, is_keypose);
