@@ -2376,8 +2376,7 @@ void SensorCoveragePlanner3D::AdvanceFromPhase1()
     }
     return;
   }
-  // InitPhase2();  // TEST: skip phase 2/3
-  InitPhase4();
+  InitPhase2();
 }
 
 void SensorCoveragePlanner3D::SendInitialWaypoint()
@@ -3924,13 +3923,11 @@ void SensorCoveragePlanner3D::execute() {
     if (dist_to_phase1_waypoint < kPhaseArrivalDist) {
       SetMainEntranceDoor(false);
       phase1_door_opened_ = false;
-      // InitPhase2();  // TEST: skip phase 2/3
-      InitPhase4();
+      InitPhase2();
     }
     return;
   }
 
-#if 0  // TEST: phase 2 disabled — skip to phase 4 after phase 1
   if (exploringPhase_ == 2) {
     ProcessObjectNodes();
     if (keypose_cloud_update_) {
@@ -3989,7 +3986,6 @@ void SensorCoveragePlanner3D::execute() {
     }
     return;
   }
-#endif
 
   if (exploringPhase_ == 4) {
     if (!kUsePhase4) {

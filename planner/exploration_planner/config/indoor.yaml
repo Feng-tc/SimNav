@@ -26,7 +26,7 @@ kMapClearingDist: 8.0  # /map_clearing radius on Phase1 first waypoint (match te
 kUsePhase1Door: true
 kMainEntranceDoorId: "main_entrance"
 
-kPhase1Waypoint: [0.0, 4.0, 0.6]
+kPhase1Waypoint: [0.0, 2.5, 0.6]
 kPhase2Waypoint: [0.0, 30.0, 0.6]
 kPhase4_1Waypoint: [0.0, 2.5, 0.6]
 kPhase4_2Waypoint: [2.2, 2.5, 0.6]
@@ -148,7 +148,7 @@ kMinAddPointNumSmall: 60
 kMinAddPointNumBig: 80
 kMinAddFrontierPointNum: 30
 kCellExploringToCoveredThr: 0   # require zero high-score viewpoints before COVERED
-kCellCoveredToExploringThr: 10
+kCellCoveredToExploringThr: 50
 kCellExploringToAlmostCoveredThr: 10
 kCellAlmostCoveredToExploringThr: 10
 kCellUnknownToExploringThr: 1

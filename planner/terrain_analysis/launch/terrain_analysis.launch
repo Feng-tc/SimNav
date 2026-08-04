@@ -2,7 +2,7 @@
 
   <node pkg="terrain_analysis" type="terrainAnalysis" name="terrainAnalysis" output="screen" required="true">
     <param name="scanVoxelSize" type="double" value="0.05" />
-    <param name="decayTime" type="double" value="2.0" />
+    <param name="decayTime" type="double" value="1.0" />
     <param name="noDecayDis" type="double" value="4.0" />
     <param name="clearingDis" type="double" value="8.0" />
     <param name="useSorting" type="bool" value="true" />
