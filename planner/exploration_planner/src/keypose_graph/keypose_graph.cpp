@@ -648,7 +648,12 @@ int KeyposeGraph::AddKeyposeNode(const nav_msgs::Odometry& keypose,
     }
     else
     {
-      ROS_ERROR_STREAM("KeyposeGraph::AddKeyposeNode: Nearest keypose ind out of range: " << min_dist_ind);
+      ROS_WARN_STREAM("KeyposeGraph::AddKeyposeNode: No keypose node within vertical threshold, "
+                      "adding isolated node at ("
+                      << current_keypose_position_.x << ", "
+                      << current_keypose_position_.y << ", "
+                      << current_keypose_position_.z << ")");
+      AddNode(current_keypose_position_, new_node_ind, current_keypose_id_, true);
       return new_node_ind;
     }
   }

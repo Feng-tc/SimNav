@@ -6,8 +6,9 @@
 | 项目          | 说明                                                  |
 | ----------- | --------------------------------------------------- |
 | 镜像          | `simenv-ros:latest`                                 |
-| 项目挂载        | 宿主机 `~/SimEnv` → 容器 `/workspace`                    |
-| libtorch 挂载 | 宿主机 `~/下载/libtorch` → 容器 `/libtorch`                |
+| 项目挂载        | 宿主机 `~/_SimNav` → 容器 `/workspace`                  |
+| libtorch 挂载 | 宿主机 `/home/fengtianchao/下载/libtorch` → 容器 `/libtorch`（**须 CUDA 版 cu118**，见 §3.1） |
+| GPU         | RTX 3060 Laptop，算力 **8.6**；宿主机只需 NVIDIA 驱动，无需装 CUDA Toolkit |
 | Docker      | **snap 安装**，必须用 `--runtime=nvidia`，不支持 `--gpus all` |
 
 
@@ -38,7 +39,7 @@ sudo docker run -it \
   -e LIBGL_DRI3_DISABLE=1 \
   -e QT_X11_NO_MITSHM=1 \
   -v /home/fengtianchao/_SimNav:/workspace \
-  -v ~/下载/libtorch:/libtorch \
+  -v /home/fengtianchao/下载/libtorch:/libtorch \
   -e DISPLAY=$DISPLAY \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --network host \
@@ -58,7 +59,9 @@ sudo docker run -it \
 每次进入容器后执行：
 
 ```bash
-export LD_LIBRARY_PATH=/var/lib/snapd/hostfs/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/libtorch/lib:/usr/local/cuda-11.8/lib64:/var/lib/snapd/hostfs/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+export CUDA_HOME=/usr/local/cuda-11.8
+export PATH=/usr/local/cuda-11.8/bin:$PATH
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __NV_PRIME_RENDER_OFFLOAD=1
 export LIBGL_DRI3_DISABLE=1
@@ -82,8 +85,57 @@ apt install -y \
   ros-noetic-controller-manager \
   ros-noetic-joint-state-controller \
   ros-noetic-effort-controllers \
-  ros-noetic-catkin
+  ros-noetic-catkin \
+  wget
 ```
+
+### 3.1 junior_ctrl RL — LibTorch GPU 与 CUDA 11.8
+
+`junior_ctrl` 的 RL 策略默认在检测到 CUDA 时使用 GPU（见 `State_RL_test.cpp`）。需满足：
+
+1. **LibTorch 必须是 CUDA 版**（文件名含 `cu118`，非 `cpu`）
+2. **容器内安装 CUDA Toolkit 11.8**（编译用；运行时主要用 libtorch 自带库）
+3. 换 libtorch 后 **重启容器**（bind mount 绑的是 inode，运行中 `mv` 替换目录不会自动更新）
+
+#### 宿主机 — 下载并放置 LibTorch
+
+从 [pytorch.org/get-started/locally](https://pytorch.org/get-started/locally/) 选 LibTorch + CUDA 11.8，或使用：
+
+```bash
+cd ~/下载
+wget https://download.pytorch.org/libtorch/cu118/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcu118.zip
+mv libtorch libtorch_cpu_backup   # 若有旧 CPU 版
+unzip libtorch-cxx11-abi-shared-with-deps-2.1.0+cu118.zip
+ls libtorch/lib/libtorch_cuda.so  # 必须存在
+```
+
+替换 libtorch 后重启容器：
+
+```bash
+sudo docker stop simenv && sudo docker start simenv
+```
+
+#### 容器内 — 安装 CUDA Toolkit 11.8（一次性）
+
+```bash
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-keyring_1.1-1_all.deb
+dpkg -i cuda-keyring_1.1-1_all.deb
+apt update
+apt install -y cuda-toolkit-11-8
+ln -sf /usr/local/cuda-11.8 /usr/local/cuda
+/usr/local/cuda-11.8/bin/nvcc --version   # 应显示 11.8
+```
+
+> 勿用 `apt install nvidia-cuda-toolkit`（Ubuntu 源为 CUDA 10.1，不满足 libtorch cu118 要求）。
+
+#### 验证 libtorch 与链接
+
+```bash
+ls /libtorch/lib/libtorch_cuda.so
+ldd /workspace/devel/lib/unitree_guide/junior_ctrl | grep -E 'torch_cuda|c10_cuda'
+```
+
+启动 `junior_ctrl` 后日志应出现 `cuda::is_available():1`。
 
 ---
 
@@ -110,11 +162,32 @@ catkin_make --force-cmake -j2 -DLIBTORCH_PATH=/libtorch
 source /workspace/devel/setup.bash
 ```
 
-代码改动后重新编译：
+**仅重编 junior_ctrl（GPU / libtorch 变更后推荐）** — 避开 exploration_planner or-tools 的 libz 冲突：
+
+```bash
+export LD_LIBRARY_PATH=/libtorch/lib:/usr/local/cuda-11.8/lib64:$LD_LIBRARY_PATH
+export CUDA_HOME=/usr/local/cuda-11.8
+export PATH=/usr/local/cuda-11.8/bin:$PATH
+
+cd /workspace
+catkin_make --force-cmake -j2 \
+  -DCATKIN_WHITELIST_PACKAGES="unitree_legged_msgs;unitree_guide" \
+  -DLIBTORCH_PATH=/libtorch \
+  -DTORCH_CUDA_ARCH_LIST=8.6 \
+  -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-11.8 \
+  -DCMAKE_CUDA_COMPILER=/usr/local/cuda-11.8/bin/nvcc
+source /workspace/devel/setup.bash
+```
+
+> `TORCH_CUDA_ARCH_LIST=8.6` 对应 RTX 3060；换 GPU 时用 `nvidia-smi --query-gpu=compute_cap --format=csv` 查询。
+
+换 libtorch（CPU ↔ CUDA）或 CUDA Toolkit 后须 `--force-cmake`；仅改 C++ 源码时：
 
 ```bash
 cd /workspace
-catkin_make -j2 -DLIBTORCH_PATH=/libtorch
+catkin_make -j2 \
+  -DCATKIN_WHITELIST_PACKAGES="unitree_legged_msgs;unitree_guide" \
+  -DLIBTORCH_PATH=/libtorch
 source /workspace/devel/setup.bash
 ```
 
@@ -147,7 +220,7 @@ source /workspace/devel/setup.bash
 ### 终端 1 — 仿真
 
 ```bash
-pkill -f gzserver; pkill -f gzclient
+pkill -f gzserver; pkill -f gzclient; pkill -f junior_ctrl
 ./auto.sh
 ```
 
@@ -176,8 +249,6 @@ roslaunch tare_planner tare_planner_indoor.launch
 自动启动 RViz（`tare_planner_indoor.rviz`），显示探索子空间、frontier、全局路径、点云等。进门与控门由 TARE Phase1 自动处理。
 
 ---
-
-
 
 ## 6. Rosbag 录制（RealSense RGB + 深度 + 位姿）
 
