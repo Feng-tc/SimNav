@@ -28,6 +28,7 @@
 #include <visualization_msgs/MarkerArray.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Int32.h>
+#include <std_msgs/Bool.h>
 
 // PCL
 #include <pcl/point_cloud.h>
@@ -95,6 +96,7 @@ private:
     void stateEstimationCallback(const nav_msgs::Odometry::ConstPtr& msg);
     void keyboardInputCallback(const std_msgs::String::ConstPtr& msg);
     void exploringPhaseCallback(const std_msgs::Int32::ConstPtr& msg);
+    void resetCallback(const std_msgs::Bool::ConstPtr& msg);
     void timerCallback(const ros::TimerEvent& event);
 
     // ==================== Core Processing Functions ====================
@@ -129,6 +131,7 @@ private:
     ros::Subscriber sub_state_estimation_;
     ros::Subscriber sub_keyboard_input_;
     ros::Subscriber sub_exploring_phase_;
+    ros::Subscriber sub_reset_;
 
     // Publishers
     ros::Publisher pub_explored_area_;

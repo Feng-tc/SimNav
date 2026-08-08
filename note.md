@@ -147,8 +147,8 @@ source /workspace/devel/setup.bash
 ### 终端 1 — 仿真
 
 ```bash
-./auto.sh
 pkill -f gzserver; pkill -f gzclient
+./auto.sh
 ```
 
 默认已关闭 Gazebo GUI，启用 Livox 雷达和点云转换。如需覆盖可在命令前添加对应环境变量（例如 `GUI=true ./auto.sh` 重新开启 GUI）。
@@ -157,7 +157,10 @@ pkill -f gzserver; pkill -f gzclient
 
 ### 终端 2 — local_planner
 
+每次重新测试前先清理残留进程，避免旧地形图污染新一轮测试：
+
 ```bash
+pkill -f "localPlanner\|pathFollower" 2>/dev/null || true
 roslaunch local_planner system_indoor_base.launch
 ```
 
@@ -166,6 +169,7 @@ roslaunch local_planner system_indoor_base.launch
 ### 终端 3 — TARE 探索
 
 ```bash
+pkill -f "tare_planner\|sensor_coverage_planner" 2>/dev/null || true
 roslaunch tare_planner tare_planner_indoor.launch
 ```
 
@@ -192,4 +196,11 @@ rosbag record -O /workspace/bags/robot_sensors_$(date +%Y%m%d_%H%M%S) \
 ```
 
 用 **Ctrl+C** 结束录制，bag 保存在 `/workspace/bags/`（宿主机 `~/_SimNav/bags/`）。
+
+### 手动开门（调试用）
+
+```bash
+# 开启主入口门（door_id 对应 indoor.yaml 中 kMainEntranceDoorId，默认 "main_entrance"）
+rosservice call /set_door_state "{door_id: 'main_entrance', open: true}"
+```
 

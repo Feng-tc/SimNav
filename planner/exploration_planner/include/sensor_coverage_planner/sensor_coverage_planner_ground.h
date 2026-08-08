@@ -142,11 +142,23 @@ private:
   bool kUsePhase1Door;
   bool kUsePhase4;
   bool kUsePhase5Waypoint;
+  bool kUsePhase7;
+  bool kUsePhase8Waypoint;
+  bool kPhase1Enable;
+  bool kPhase2Enable;
+  bool kPhase3Enable;
+  bool kPhase4Enable;
+  bool kPhase5Enable;
+  bool kPhase6Enable;
+  bool kPhase7Enable;
+  bool kPhase8Enable;
+  bool kPhase9Enable;
 
   // String
   std::string kTargetObject;
   std::string kMainEntranceDoorId;
   std::string kPhase4ElevatorId;
+  std::string kPhase7ElevatorId;
   double kKeyposeCloudDwzFilterLeafSize;
   double kRushHomeDist;
   double kAtHomeDistThreshold;
@@ -175,6 +187,18 @@ private:
   double kPhase4_3WaypointX;
   double kPhase4_3WaypointY;
   double kPhase4_3WaypointZ;
+  double kPhase7_1WaypointX;
+  double kPhase7_1WaypointY;
+  double kPhase7_1WaypointZ;
+  double kPhase7_2WaypointX;
+  double kPhase7_2WaypointY;
+  double kPhase7_2WaypointZ;
+  double kPhase7_3WaypointX;
+  double kPhase7_3WaypointY;
+  double kPhase7_3WaypointZ;
+  double kPhase8WaypointX;
+  double kPhase8WaypointY;
+  double kPhase8WaypointZ;
 
   // Int
   int kWaypointPlanningScanInterval;
@@ -182,6 +206,8 @@ private:
   int kDirectionNoChangeCounterThr;
   int kResetWaypointJoystickAxesID;
   int kPhase4NoRoomCycles;
+  int kPhase7NoRoomCycles;
+  int kPhase7ElevatorTargetFloor;
   int previous_room_id_;
 
   std::shared_ptr<pointcloud_utils_ns::PCLCloud<PlannerCloudPointType>>
@@ -253,12 +279,18 @@ private:
   geometry_msgs::Point phase1_waypoint_;
   geometry_msgs::Point phase4_waypoint_;
   geometry_msgs::Point phase5_waypoint_;
+  geometry_msgs::Point phase7_waypoint_;
+  geometry_msgs::Point phase8_waypoint_;
   bool phase1_door_opened_;
   bool phase1_pointcloud_reset_;
   bool phase5_arrived_;
   bool phase4_elevator_ready_;
   int phase4_step_;
   bool phase4_ride_requested_;
+  bool phase7_elevator_ready_;
+  int phase7_step_;
+  bool phase7_ride_requested_;
+  bool phase8_arrived_;
   int no_unexplored_room_counter_;
   ros::ServiceClient set_door_state_client_;
   ros::ServiceClient call_elevator_client_;
@@ -333,6 +365,7 @@ private:
       momentum_activation_count_pub_;
   ros::Publisher exploring_phase_pub_;
   ros::Publisher map_clearing_pub_;
+  ros::Publisher reset_room_seg_pub_;
   // Debug
   ros::Publisher
       pointcloud_manager_neighbor_cells_origin_pub_;
@@ -364,6 +397,8 @@ private:
   void PublishPhase5Waypoint();
   void PublishPhase1Waypoint();
   void PublishPhase4Waypoint();
+  void PublishPhase7Waypoint();
+  void PublishPhase8Waypoint();
   bool SetMainEntranceDoor(bool open, double service_wait_timeout = 1.0);
   bool SetElevatorDoorById(const std::string& door_id, bool open,
                            double service_wait_timeout = 1.0);
@@ -371,12 +406,16 @@ private:
   bool OpenAllElevatorDoors(double service_wait_timeout = 1.0);
   bool CallElevatorToFloor(int floor, bool open_doors, double service_wait_timeout = 1.0);
   bool TrySetupPhase4Elevator();
+  bool TrySetupPhase7Elevator();
   bool TryOpenPhase1Entry(double service_wait_timeout = 5.0);
   void PublishExploringPhase();
   void InitPhase2();
   void InitPhase4();
   void InitPhase5();
   void InitPhase6();
+  void InitPhase7();
+  void InitPhase8();
+  void InitPhase9();
   bool IsRoomExplorationPhase() const;
   void AdvanceFromPhase1();
   void UpdateKeyposeGraph();

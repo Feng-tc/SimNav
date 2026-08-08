@@ -158,6 +158,8 @@ RoomSegmentationNode::RoomSegmentationNode(ros::NodeHandle& nh, ros::NodeHandle&
 
     sub_exploring_phase_ = nh_.subscribe<std_msgs::Int32>("/exploring_phase", 1, &RoomSegmentationNode::exploringPhaseCallback, this);
 
+    sub_reset_ = nh_.subscribe<std_msgs::Bool>("/reset_room_segmentation", 1, &RoomSegmentationNode::resetCallback, this);
+
     // ==================== Create Publishers ====================
     pub_explored_area_ = nh_.advertise<sensor_msgs::PointCloud2>("/explore_areas_new", 5);
     pub_room_mask_vis_ = nh_.advertise<sensor_msgs::Image>("/room_mask_vis", 5);
@@ -181,6 +183,26 @@ RoomSegmentationNode::RoomSegmentationNode(ros::NodeHandle& nh, ros::NodeHandle&
 
 void RoomSegmentationNode::exploringPhaseCallback(const std_msgs::Int32::ConstPtr& msg) {
     exploring_phase_ = msg->data;
+}
+
+void RoomSegmentationNode::resetCallback(const std_msgs::Bool::ConstPtr& /*msg*/) {
+    std::fill(navigable_voxels_.begin(), navigable_voxels_.end(), 0);
+    std::fill(state_voxels_.begin(), state_voxels_.end(), -1);
+    freespace_indices_.clear();
+    navigable_map_all_.setTo(0);
+    wall_hist_all_.setTo(0);
+    state_map_all_.setTo(0);
+    room_mask_.setTo(0);
+    room_mask_vis_.setTo(cv::Scalar(255, 255, 255));
+    downsampled_explored_area_cloud_->clear();
+    downsampled_ceiling_cloud_->clear();
+    plane_infos_.clear();
+    room_nodes_map_.clear();
+    room_node_counter_ = 0;
+    bbox_ = { Eigen::Vector2i(0, 0),
+              Eigen::Vector2i(room_voxel_dimension_[0] - 1,
+                              room_voxel_dimension_[1] - 1) };
+    ROS_INFO("room_segmentation: cache reset for new floor.");
 }
 
 // ==================== Timer Callback ====================

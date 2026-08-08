@@ -95,4 +95,5 @@
             <param name="use_ground_truth_odom" value="$(arg pointcloud_use_ground_truth_odom)"/>
         </node>
     </group>
+
 </launch>

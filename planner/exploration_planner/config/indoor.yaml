@@ -26,12 +26,26 @@ kMapClearingDist: 8.0  # /map_clearing radius on Phase1 first waypoint (match te
 kUsePhase1Door: true
 kMainEntranceDoorId: "main_entrance"
 
+kPhase1Enable: true
+kPhase2Enable: false
+kPhase3Enable: false
+kPhase4Enable: true
+kPhase5Enable: true
+kPhase6Enable: true
+kPhase7Enable: true   # false → skip 2F→3F elevator
+kPhase8Enable: true   # false → equivalent to kUsePhase8Waypoint: false
+kPhase9Enable: true   # false → skip 3F room exploration, mark finished
+
 kPhase1Waypoint: [0.0, 2.5, 0.6]
 kPhase2Waypoint: [0.0, 30.0, 0.6]
 kPhase4_1Waypoint: [0.0, 2.5, 0.6]
 kPhase4_2Waypoint: [2.2, 2.5, 0.6]
 kPhase4_3Waypoint: [0.0, 2.5, 2.9]
 kPhase5Waypoint: [0.0, 30.0, 2.9]
+kPhase7_1Waypoint: [0.0, 2.5, 2.9]   # approach elevator on 2F
+kPhase7_2Waypoint: [2.2, 2.5, 2.9]   # board elevator on 2F
+kPhase7_3Waypoint: [0.0, 2.5, 5.2]   # exit elevator on 3F
+kPhase8Waypoint: [0.0, 30.0, 5.2]    # 3F corridor waypoint
 
 kPhase1LookaheadDist: 2.5
 kUsePhase2Waypoint: true
@@ -41,6 +55,13 @@ kPhase4NoRoomCycles: 3
 kPhase4ElevatorId: "elevator_main"
 
 kUsePhase5Waypoint: true
+
+kUsePhase7: true
+kPhase7NoRoomCycles: 3
+kPhase7ElevatorId: "elevator_main"
+kPhase7ElevatorTargetFloor: 2   # floor index 2 = 3F
+
+kUsePhase8Waypoint: true
 
 kRushHome: true
 kUseTerrainHeight: false

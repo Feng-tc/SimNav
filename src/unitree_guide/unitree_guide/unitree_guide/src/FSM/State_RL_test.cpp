@@ -29,7 +29,7 @@ State_RL::State_RL(CtrlComponents *ctrlComp)
     gravity(1,0) = 0.0;
     gravity(2,0) = -0.98;
     //在构造函数中初始化，订阅
-    this->Sub_=nh.subscribe<geometry_msgs::Twist>("/cmd_vel",1000,boost::bind(&FSMState::cmdVelCallback,this,_1));
+    this->Sub_=nh.subscribe<geometry_msgs::Twist>("/cmd_vel",1,boost::bind(&FSMState::cmdVelCallback,this,_1));
 
 }
 
