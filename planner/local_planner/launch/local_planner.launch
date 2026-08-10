@@ -65,8 +65,8 @@
     <param name="pubSkipNum" type="int" value="1" />
     <param name="twoWayDrive" value="$(arg twoWayDrive)" />
     <param name="lookAheadDis" type="double" value="0.8" />
-    <param name="yawRateGain" type="double" value="3.0" />
-    <param name="stopYawRateGain" type="double" value="3.0" />
+    <param name="yawRateGain" type="double" value="3.5" />
+    <param name="stopYawRateGain" type="double" value="3.5" />
     <param name="maxYawRate" type="double" value="30.0" />
     <param name="maxSpeed" value="$(arg maxSpeed)" />
     <param name="maxAccel" type="double" value="0.5" />

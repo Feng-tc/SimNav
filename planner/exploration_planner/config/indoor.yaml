@@ -19,6 +19,8 @@ pub_waypoint_topic_: /way_point
 pub_momentum_activation_count_topic_: momentum_activation_count
 pub_exploring_phase_topic_: /exploring_phase
 
+ceilingHeight_: 2.0
+
 # Planner behavior
 kAutoStart: true
 kPhaseArrivalDist: 1.0  # shared XY arrival threshold for phase 1/2/4/5 waypoints
@@ -40,12 +42,12 @@ kPhase1Waypoint: [0.0, 2.5, 0.6]
 kPhase2Waypoint: [0.0, 30.0, 0.6]
 kPhase4_1Waypoint: [0.0, 2.5, 0.6]
 kPhase4_2Waypoint: [2.2, 2.5, 0.6]
-kPhase4_3Waypoint: [0.0, 2.5, 2.9]
-kPhase5Waypoint: [0.0, 30.0, 2.9]
-kPhase7_1Waypoint: [0.0, 2.5, 2.9]   # approach elevator on 2F
-kPhase7_2Waypoint: [2.2, 2.5, 2.9]   # board elevator on 2F
-kPhase7_3Waypoint: [0.0, 2.5, 5.2]   # exit elevator on 3F
-kPhase8Waypoint: [0.0, 30.0, 5.2]    # 3F corridor waypoint
+kPhase4_3Waypoint: [0.0, 2.5, 3.2]   # 2F: 2.6 + 0.6
+kPhase5Waypoint: [0.0, 30.0, 3.2]   # 2F: 2.6 + 0.6
+kPhase7_1Waypoint: [0.0, 2.5, 3.2]   # 2F: 2.6 + 0.6, approach elevator
+kPhase7_2Waypoint: [2.2, 2.5, 3.2]   # 2F: 2.6 + 0.6, board elevator
+kPhase7_3Waypoint: [0.0, 2.5, 5.8]   # 3F: 5.2 + 0.6, exit elevator
+kPhase8Waypoint: [0.0, 30.0, 5.8]    # 3F: 5.2 + 0.6, corridor waypoint
 
 kPhase1LookaheadDist: 2.5
 kUsePhase2Waypoint: true

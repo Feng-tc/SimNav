@@ -3,13 +3,13 @@
 ## 环境说明
 
 
-| 项目          | 说明                                                  |
-| ----------- | --------------------------------------------------- |
-| 镜像          | `simenv-ros:latest`                                 |
-| 项目挂载        | 宿主机 `~/_SimNav` → 容器 `/workspace`                  |
+| 项目          | 说明                                                                               |
+| ----------- | -------------------------------------------------------------------------------- |
+| 镜像          | `simenv-ros:latest`                                                              |
+| 项目挂载        | 宿主机 `~/_SimNav` → 容器 `/workspace`                                                |
 | libtorch 挂载 | 宿主机 `/home/fengtianchao/下载/libtorch` → 容器 `/libtorch`（**须 CUDA 版 cu118**，见 §3.1） |
-| GPU         | RTX 3060 Laptop，算力 **8.6**；宿主机只需 NVIDIA 驱动，无需装 CUDA Toolkit |
-| Docker      | **snap 安装**，必须用 `--runtime=nvidia`，不支持 `--gpus all` |
+| GPU         | RTX 3060 Laptop，算力 **8.6**；宿主机只需 NVIDIA 驱动，无需装 CUDA Toolkit                      |
+| Docker      | **snap 安装**，必须用 `--runtime=nvidia`，不支持 `--gpus all`                              |
 
 
 > ROS 命令只能在**容器内**执行。
@@ -52,8 +52,6 @@ sudo docker run -it \
 
 ---
 
-
-
 ## 2. 容器内 — 环境变量
 
 每次进入容器后执行：
@@ -73,8 +71,6 @@ source /workspace/devel/setup.bash
 ```
 
 ---
-
-
 
 ## 3. 新建容器时 — 安装依赖
 
@@ -139,8 +135,6 @@ ldd /workspace/devel/lib/unitree_guide/junior_ctrl | grep -E 'torch_cuda|c10_cud
 
 ---
 
-
-
 ## 4. Planner 接入与编译
 
 planner 源码在 `planner/`，用**相对路径**链入 `src/`：
@@ -154,7 +148,7 @@ for d in exploration_planner local_planner terrain_analysis terrain_analysis_ext
 done
 ```
 
-首次编译（需已放置 `planner/exploration_planner/or-tools/` 和 `include/nlohmann/json.hpp`）：
+编译
 
 ```bash
 cd /workspace
@@ -162,38 +156,7 @@ catkin_make --force-cmake -j2 -DLIBTORCH_PATH=/libtorch
 source /workspace/devel/setup.bash
 ```
 
-**仅重编 junior_ctrl（GPU / libtorch 变更后推荐）** — 避开 exploration_planner or-tools 的 libz 冲突：
-
-```bash
-export LD_LIBRARY_PATH=/libtorch/lib:/usr/local/cuda-11.8/lib64:$LD_LIBRARY_PATH
-export CUDA_HOME=/usr/local/cuda-11.8
-export PATH=/usr/local/cuda-11.8/bin:$PATH
-
-cd /workspace
-catkin_make --force-cmake -j2 \
-  -DCATKIN_WHITELIST_PACKAGES="unitree_legged_msgs;unitree_guide" \
-  -DLIBTORCH_PATH=/libtorch \
-  -DTORCH_CUDA_ARCH_LIST=8.6 \
-  -DCUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-11.8 \
-  -DCMAKE_CUDA_COMPILER=/usr/local/cuda-11.8/bin/nvcc
-source /workspace/devel/setup.bash
-```
-
-> `TORCH_CUDA_ARCH_LIST=8.6` 对应 RTX 3060；换 GPU 时用 `nvidia-smi --query-gpu=compute_cap --format=csv` 查询。
-
-换 libtorch（CPU ↔ CUDA）或 CUDA Toolkit 后须 `--force-cmake`；仅改 C++ 源码时：
-
-```bash
-cd /workspace
-catkin_make -j2 \
-  -DCATKIN_WHITELIST_PACKAGES="unitree_legged_msgs;unitree_guide" \
-  -DLIBTORCH_PATH=/libtorch
-source /workspace/devel/setup.bash
-```
-
 ---
-
-
 
 ## 5. 启动仿真 + Planner
 
@@ -213,8 +176,6 @@ source /workspace/devel/setup.bash
 | 1   | 仿真 + 控制器（`auto.sh`）            |
 | 2   | 局部规划，不开 RViz（`local_planner`）  |
 | 3   | TARE 探索 + RViz（`tare_planner`） |
-
-
 
 
 ### 终端 1 — 仿真
