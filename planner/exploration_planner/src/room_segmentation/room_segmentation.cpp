@@ -207,7 +207,7 @@ void RoomSegmentationNode::resetCallback(const std_msgs::Bool::ConstPtr& /*msg*/
 
 // ==================== Timer Callback ====================
 void RoomSegmentationNode::timerCallback(const ros::TimerEvent& /*event*/) {
-    if (exploring_phase_ == 1 || exploring_phase_ == 4) {
+    if (exploring_phase_ == 1 || exploring_phase_ == 4 || exploring_phase_ == 7) {
         return;
     }
     if (demo_frozen_) {
@@ -358,7 +358,7 @@ void RoomSegmentationNode::keyboardInputCallback(const std_msgs::String::ConstPt
 
 // ==================== Callback Functions ====================
 void RoomSegmentationNode::laserCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
-    if (exploring_phase_ == 1 || exploring_phase_ == 4) {
+    if (exploring_phase_ == 1 || exploring_phase_ == 4 || exploring_phase_ == 7) {
         return;
     }
     if (demo_frozen_) {
@@ -501,7 +501,7 @@ void RoomSegmentationNode::laserCloudCallback(const sensor_msgs::PointCloud2::Co
 }
 
 void RoomSegmentationNode::occupiedCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
-    if (exploring_phase_ == 1 || exploring_phase_ == 4) {
+    if (exploring_phase_ == 1 || exploring_phase_ == 4 || exploring_phase_ == 7) {
         return;
     }
     if (demo_frozen_) {

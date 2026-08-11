@@ -220,7 +220,7 @@ private:
     geometry_msgs::Point robot_position_; // robot position in world frame
     int explored_area_display_count_; // counter for publishing explored area
     bool segment_flag_; // flag to trigger room segmentation
-    int exploring_phase_; // 1/4=skip room segmentation; 3/5/6=active
+    int exploring_phase_; // 1/4/7=skip (elevator); 3/5/6/8/9=active
     bool demo_frozen_; // when true, stop updating and keep republishing cached results
     int demo_publish_count_; // counter for throttling publish rate while frozen
 };

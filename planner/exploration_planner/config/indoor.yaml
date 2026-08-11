@@ -19,6 +19,7 @@ pub_waypoint_topic_: /way_point
 pub_momentum_activation_count_topic_: momentum_activation_count
 pub_exploring_phase_topic_: /exploring_phase
 
+wall_thres_height_: 1.2
 ceilingHeight_: 2.0
 
 # Planner behavior
@@ -32,8 +33,8 @@ kPhase1Enable: true
 kPhase2Enable: false
 kPhase3Enable: false
 kPhase4Enable: true
-kPhase5Enable: true
-kPhase6Enable: true
+kPhase5Enable: false
+kPhase6Enable: false
 kPhase7Enable: true   # false → skip 2F→3F elevator
 kPhase8Enable: true   # false → equivalent to kUsePhase8Waypoint: false
 kPhase9Enable: true   # false → skip 3F room exploration, mark finished

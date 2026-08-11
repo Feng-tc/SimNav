@@ -409,6 +409,7 @@ private:
   bool TrySetupPhase7Elevator();
   bool TryOpenPhase1Entry(double service_wait_timeout = 5.0);
   void PublishExploringPhase();
+  void ResetRoomSegmentationCache();
   void InitPhase2();
   void InitPhase4();
   void InitPhase5();

@@ -2156,6 +2156,14 @@ void SensorCoveragePlanner3D::PublishExploringPhase()
   exploring_phase_pub_.publish(msg);
 }
 
+void SensorCoveragePlanner3D::ResetRoomSegmentationCache()
+{
+  std_msgs::Bool reset_msg;
+  reset_msg.data = true;
+  reset_room_seg_pub_.publish(reset_msg);
+  ROS_INFO("Published /reset_room_segmentation to clear previous floor cache");
+}
+
 void SensorCoveragePlanner3D::PublishPhase2Waypoint()
 {
   geometry_msgs::PointStamped waypoint;
@@ -2400,7 +2408,9 @@ void SensorCoveragePlanner3D::InitPhase4()
 
 void SensorCoveragePlanner3D::InitPhase5()
 {
+  ResetRoomSegmentationCache();
   exploringPhase_ = 5;
+  PublishExploringPhase();
   phase5_arrived_ = false;
   phase5_waypoint_.x = kPhase5WaypointX;
   phase5_waypoint_.y = kPhase5WaypointY;
@@ -2500,7 +2510,9 @@ void SensorCoveragePlanner3D::InitPhase7()
 
 void SensorCoveragePlanner3D::InitPhase8()
 {
+  ResetRoomSegmentationCache();
   exploringPhase_ = 8;
+  PublishExploringPhase();
   phase8_arrived_ = false;
   phase8_waypoint_.x = kPhase8WaypointX;
   phase8_waypoint_.y = kPhase8WaypointY;
@@ -4318,14 +4330,11 @@ void SensorCoveragePlanner3D::execute() {
         if (dist_floor2_exit < kPhaseArrivalDist) {
           ROS_INFO("Phase4: arrived at floor-2 exit waypoint [%.2f, %.2f, %.2f]",
                    phase4_waypoint_.x, phase4_waypoint_.y, phase4_waypoint_.z);
-          std_msgs::Bool reset_msg;
-          reset_msg.data = true;
-          reset_room_seg_pub_.publish(reset_msg);
-          ROS_INFO("Phase4: published /reset_room_segmentation to clear floor-1 cache");
           if (kPhase5Enable && kUsePhase5Waypoint) {
             InitPhase5();
           } else {
             ROS_INFO("Phase5 disabled, skipping to Phase6");
+            ResetRoomSegmentationCache();
             InitPhase6();
           }
         }
@@ -4454,14 +4463,11 @@ void SensorCoveragePlanner3D::execute() {
         if (dist_floor3_exit < kPhaseArrivalDist) {
           ROS_INFO("Phase7: arrived at floor-3 exit waypoint [%.2f, %.2f, %.2f]",
                    phase7_waypoint_.x, phase7_waypoint_.y, phase7_waypoint_.z);
-          std_msgs::Bool reset_msg;
-          reset_msg.data = true;
-          reset_room_seg_pub_.publish(reset_msg);
-          ROS_INFO("Phase7: published /reset_room_segmentation to clear floor-2 cache");
           if (kPhase8Enable && kUsePhase8Waypoint) {
             InitPhase8();
           } else {
             ROS_INFO("Phase8 disabled, skipping to Phase9");
+            ResetRoomSegmentationCache();
             InitPhase9();
           }
         }
