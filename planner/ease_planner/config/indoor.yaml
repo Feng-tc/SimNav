@@ -16,7 +16,7 @@ kPhase1Waypoint: [0.0, 2.5, 0.6]
 # Per-floor tour waypoints [x, y, z]. Empty list skips that floor's tour.
 kFloor1Waypoints:
   # 房间入口
-  - [0.0, 14.6, 0.6]  
+  - [0.0, 14.6, 0.6]
   # 探索第一个房间
   - [-2.5, 14.6, 0.6]
   - [-5.0, 10.0, 0.6]
@@ -47,6 +47,8 @@ kFloor1Waypoints:
   - [5.0, 33.4, 0.6]
   - [2.5, 28.8, 0.6]
   - [0.0, 28.8, 0.6]
+
+  - [0.0, 14.6, 0.6]
 
 kFloor2Waypoints:
   # 房间入口
@@ -82,6 +84,8 @@ kFloor2Waypoints:
   - [2.5, 28.8, 3.2]
   - [0.0, 28.8, 3.2]
 
+  - [0.0, 14.6, 3.2]
+
 kFloor3Waypoints:
   # 房间入口
   - [0.0, 14.6, 5.8]
@@ -115,6 +119,8 @@ kFloor3Waypoints:
   - [5.0, 33.4, 5.8]
   - [2.5, 28.8, 5.8]
   - [0.0, 28.8, 5.8]
+
+  - [0.0, 14.6, 3.2]
 
 kElevatorId: "elevator_main"
 kElevatorServedFloorCount: 3
