@@ -141,7 +141,7 @@ planner 源码在 `planner/`，用**相对路径**链入 `src/`：
 
 ```bash
 cd /workspace/src
-for d in exploration_planner local_planner terrain_analysis terrain_analysis_ext \
+for d in exploration_planner ease_planner local_planner terrain_analysis terrain_analysis_ext \
          sensor_scan_generation semantic_mapping waypoint_rviz_plugin; do
   rm -f "$d"
   ln -sf "../planner/$d" "$d"
@@ -160,14 +160,14 @@ source /workspace/devel/setup.bash
 
 ## 5. 启动仿真 + Planner
 
-默认采用 **Gazebo 无 GUI + RViz 观测** 方案：Gazebo 只跑后端仿真，可视化交给 TARE 的 RViz。以下默认值已写入对应文件，无需每次指定：
+默认采用 **Gazebo 无 GUI + RViz 观测** 方案：Gazebo 只跑后端仿真，可视化交给终端 3 的 RViz（TARE 或 ease）。以下默认值已写入对应文件，无需每次指定：
 
 
 | 默认值来源                        | 修改内容                                                   |
 | ---------------------------- | ------------------------------------------------------ |
 | `auto.sh`                    | `GUI=false`、`ENABLE_SENSOR_DATA=0`、`ENABLE_LIVOX=true` |
 | `system_indoor_base.launch`  | `rviz` 默认 `false`（避免双 RViz）                            |
-| `tare_planner_indoor.launch` | `rviz` 默认 `true`（唯一 RViz 窗口）                           |
+| `tare_planner_indoor.launch` / `ease_planner_indoor.launch` | `rviz` 默认 `true`（唯一 RViz 窗口） |
 
 
 
@@ -175,7 +175,7 @@ source /workspace/devel/setup.bash
 | --- | ------------------------------ |
 | 1   | 仿真 + 控制器（`auto.sh`）            |
 | 2   | 局部规划，不开 RViz（`local_planner`）  |
-| 3   | TARE 探索 + RViz（`tare_planner`） |
+| 3   | 探索规划 + RViz（`tare_planner` 或 `ease_planner`，二选一） |
 
 
 ### 终端 1 — 仿真
@@ -200,14 +200,27 @@ roslaunch local_planner system_indoor_base.launch
 
 不启动 RViz，避免与终端 3 重复。如需单独调试局部规划，可加 `rviz:=true`。
 
-### 终端 3 — TARE 探索
+### 终端 3 — 探索规划（二选一）
+
+同一时间只启动其中一个。
+
+TARE 智能探索：
 
 ```bash
-pkill -f "tare_planner\|sensor_coverage_planner" 2>/dev/null || true
+pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner" 2>/dev/null || true
 roslaunch tare_planner tare_planner_indoor.launch
 ```
 
 自动启动 RViz（`tare_planner_indoor.rviz`），显示探索子空间、frontier、全局路径、点云等。进门与控门由 TARE Phase1 自动处理。
+
+手动航点巡游（`ease_planner`，目标点写在 `planner/ease_planner/config/indoor.yaml`）：
+
+```bash
+pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner" 2>/dev/null || true
+roslaunch ease_planner ease_planner_indoor.launch
+```
+
+自动启动 RViz（`ease_planner_indoor.rviz`）。Phase1 进门逻辑与 TARE 相同，随后按配置航点逐层巡游并乘电梯上 2F/3F。
 
 ---
 

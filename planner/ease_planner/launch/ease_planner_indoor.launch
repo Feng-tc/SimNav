@@ -1,0 +1,13 @@
+<launch>
+  <arg name="scenario" default="indoor" />
+  <arg name="rviz" default="true" />
+  <arg name="state_estimation_topic" default="/Odometry_gazebo" />
+
+  <node pkg="ease_planner" type="ease_planner_node" name="ease_planner_node" output="screen">
+    <rosparam file="$(find ease_planner)/config/$(arg scenario).yaml" command="load" />
+    <remap from="/Odometry_gazebo" to="$(arg state_estimation_topic)" />
+  </node>
+
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="ease_planner_rviz"
+        args="-d $(find ease_planner)/rviz/ease_planner_indoor.rviz" output="screen" />
+</launch>

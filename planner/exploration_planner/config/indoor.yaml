@@ -19,7 +19,7 @@ pub_waypoint_topic_: /way_point
 pub_momentum_activation_count_topic_: momentum_activation_count
 pub_exploring_phase_topic_: /exploring_phase
 
-wall_thres_height_: 1.2
+wall_thres_height_: 0.0
 ceilingHeight_: 2.0
 
 # Planner behavior
@@ -28,16 +28,19 @@ kPhaseArrivalDist: 1.0  # shared XY arrival threshold for phase 1/2/4/5 waypoint
 kMapClearingDist: 8.0  # /map_clearing radius on Phase1 first waypoint (match terrain_analysis)
 kUsePhase1Door: true
 kMainEntranceDoorId: "main_entrance"
+kRoomSegmentation1FEnable: true   # Phase 2/3: room segmentation on 1F
+kRoomSegmentation2FEnable: false  # Phase 5/6: false → open TARE exploration on 2F
+kRoomSegmentation3FEnable: false  # Phase 8/9: false → open TARE exploration on 3F
 
 kPhase1Enable: true
 kPhase2Enable: false
 kPhase3Enable: false
 kPhase4Enable: true
 kPhase5Enable: false
-kPhase6Enable: false
-kPhase7Enable: true   # false → skip 2F→3F elevator
-kPhase8Enable: true   # false → equivalent to kUsePhase8Waypoint: false
-kPhase9Enable: true   # false → skip 3F room exploration, mark finished
+kPhase6Enable: true
+kPhase7Enable: true
+kPhase8Enable: false
+kPhase9Enable: true
 
 kPhase1Waypoint: [0.0, 2.5, 0.6]
 kPhase2Waypoint: [0.0, 30.0, 0.6]
@@ -65,6 +68,9 @@ kPhase7ElevatorId: "elevator_main"
 kPhase7ElevatorTargetFloor: 2   # floor index 2 = 3F
 
 kUsePhase8Waypoint: true
+
+kVerboseExplorationStatus: true          # periodic status lines in tare_planner terminal
+kVerboseExplorationStatusInterval: 1.0   # seconds between status lines
 
 kRushHome: true
 kUseTerrainHeight: false
@@ -95,8 +101,8 @@ kTargetObject: ball
 rep_threshold_: 0.1
 kRepSensorRange: 5.0
 room_resolution: 0.1
-room_x: 2000
-room_y: 2000
+room_x: 1000
+room_y: 1000
 room_z: 50
 
 # PlanningEnv

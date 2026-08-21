@@ -153,6 +153,11 @@ private:
   bool kPhase7Enable;
   bool kPhase8Enable;
   bool kPhase9Enable;
+  bool kRoomSegmentation1FEnable;
+  bool kRoomSegmentation2FEnable;
+  bool kRoomSegmentation3FEnable;
+  bool kVerboseExplorationStatus;
+  double kVerboseExplorationStatusInterval;
 
   // String
   std::string kTargetObject;
@@ -292,6 +297,10 @@ private:
   bool phase7_ride_requested_;
   bool phase8_arrived_;
   int no_unexplored_room_counter_;
+  int last_status_frontier_;
+  int last_status_uncovered_;
+  int last_status_vp_count_;
+  bool last_status_local_complete_;
   ros::ServiceClient set_door_state_client_;
   ros::ServiceClient call_elevator_client_;
   bool lookahead_point_update_;
@@ -418,6 +427,12 @@ private:
   void InitPhase8();
   void InitPhase9();
   bool IsRoomExplorationPhase() const;
+  bool IsRoomSegmentationEnabledForPhase(int phase) const;
+  bool UsesRoomSegmentation() const;
+  bool UsesRoomBasedExploration() const;
+  bool IsOpenExplorationPhase() const;
+  void ClearUpperFloorRoomState();
+  void LogExplorationStatus() const;
   void AdvanceFromPhase1();
   void UpdateKeyposeGraph();
   int UpdateViewPoints();

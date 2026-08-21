@@ -175,6 +175,25 @@ void SensorCoveragePlanner3D::ReadParameters() {
   private_nh_.param("kPhase8Enable", kPhase8Enable, true);
   private_nh_.param("kPhase9Enable", kPhase9Enable, true);
 
+  private_nh_.param("kRoomSegmentation1FEnable", kRoomSegmentation1FEnable, true);
+  private_nh_.param("kRoomSegmentation2FEnable", kRoomSegmentation2FEnable, false);
+  private_nh_.param("kRoomSegmentation3FEnable", kRoomSegmentation3FEnable, false);
+  private_nh_.param("kVerboseExplorationStatus", kVerboseExplorationStatus, true);
+  private_nh_.param("kVerboseExplorationStatusInterval", kVerboseExplorationStatusInterval, 1.0);
+  if (kVerboseExplorationStatusInterval < 0.2) {
+    ROS_WARN("kVerboseExplorationStatusInterval must be >= 0.2, resetting to 0.2");
+    kVerboseExplorationStatusInterval = 0.2;
+  }
+  // Legacy alias: kRoomSegmentation1FOnly=true → 1F on, 2F/3F off
+  if (private_nh_.hasParam("kRoomSegmentation1FOnly") &&
+      !private_nh_.hasParam("kRoomSegmentation1FEnable")) {
+    bool legacy_1f_only = true;
+    private_nh_.param("kRoomSegmentation1FOnly", legacy_1f_only, true);
+    kRoomSegmentation1FEnable = legacy_1f_only;
+    kRoomSegmentation2FEnable = !legacy_1f_only;
+    kRoomSegmentation3FEnable = !legacy_1f_only;
+  }
+
   private_nh_.param("kUsePhase7", kUsePhase7, false);
   private_nh_.param("kPhase7NoRoomCycles", kPhase7NoRoomCycles, 3);
   private_nh_.param<std::string>("kPhase7ElevatorId", kPhase7ElevatorId, "elevator_main");
@@ -538,6 +557,10 @@ void SensorCoveragePlanner3D::InitializeData() {
   phase4_step_ = 0;
   phase4_ride_requested_ = false;
   no_unexplored_room_counter_ = 0;
+  last_status_frontier_ = -1;
+  last_status_uncovered_ = -1;
+  last_status_vp_count_ = -1;
+  last_status_local_complete_ = false;
 }
 
 SensorCoveragePlanner3D::SensorCoveragePlanner3D(ros::NodeHandle& nh, ros::NodeHandle& private_nh)
@@ -554,7 +577,9 @@ SensorCoveragePlanner3D::SensorCoveragePlanner3D(ros::NodeHandle& nh, ros::NodeH
       reset_waypoint_(false), registered_cloud_count_(0), keypose_count_(0),
       direction_change_count_(0), direction_no_change_count_(0),
       momentum_activation_count_(0), reset_waypoint_joystick_axis_value_(-1.0),
-      add_viewpoint_rep_(false), at_room_(false), near_room_1_(false), near_room_2_(false)
+      add_viewpoint_rep_(false), at_room_(false), near_room_1_(false), near_room_2_(false),
+      last_status_frontier_(-1), last_status_uncovered_(-1), last_status_vp_count_(-1),
+      last_status_local_complete_(false)
 {
   std::cout << "finished constructor" << std::endl;
 }
@@ -1142,6 +1167,10 @@ void SensorCoveragePlanner3D::RoomMaskCallback(
     return;
   }
   if (exploringPhase_ == 1)
+  {
+    return;
+  }
+  if (!UsesRoomSegmentation())
   {
     return;
   }
@@ -2409,6 +2438,9 @@ void SensorCoveragePlanner3D::InitPhase4()
 void SensorCoveragePlanner3D::InitPhase5()
 {
   ResetRoomSegmentationCache();
+  if (!kRoomSegmentation2FEnable) {
+    ClearUpperFloorRoomState();
+  }
   exploringPhase_ = 5;
   PublishExploringPhase();
   phase5_arrived_ = false;
@@ -2425,13 +2457,98 @@ bool SensorCoveragePlanner3D::IsRoomExplorationPhase() const
   return exploringPhase_ == 3 || exploringPhase_ == 6 || exploringPhase_ == 9;
 }
 
+bool SensorCoveragePlanner3D::IsRoomSegmentationEnabledForPhase(int phase) const
+{
+  switch (phase) {
+    case 2:
+    case 3:
+      return kRoomSegmentation1FEnable;
+    case 5:
+    case 6:
+      return kRoomSegmentation2FEnable;
+    case 8:
+    case 9:
+      return kRoomSegmentation3FEnable;
+    default:
+      return false;
+  }
+}
+
+bool SensorCoveragePlanner3D::UsesRoomSegmentation() const
+{
+  return IsRoomSegmentationEnabledForPhase(exploringPhase_);
+}
+
+bool SensorCoveragePlanner3D::UsesRoomBasedExploration() const
+{
+  if (exploringPhase_ == 3) {
+    return kRoomSegmentation1FEnable;
+  }
+  if (exploringPhase_ == 6) {
+    return kRoomSegmentation2FEnable;
+  }
+  if (exploringPhase_ == 9) {
+    return kRoomSegmentation3FEnable;
+  }
+  return false;
+}
+
+bool SensorCoveragePlanner3D::IsOpenExplorationPhase() const
+{
+  if (exploringPhase_ == 6) {
+    return !kRoomSegmentation2FEnable;
+  }
+  if (exploringPhase_ == 9) {
+    return !kRoomSegmentation3FEnable;
+  }
+  return false;
+}
+
+void SensorCoveragePlanner3D::ClearUpperFloorRoomState()
+{
+  room_mask_.setTo(0);
+  room_mask_old_.setTo(0);
+  current_room_id_ = -1;
+  candidate_room_id_ = -1;
+  has_candidate_room_position_ = false;
+  transit_across_room_ = false;
+  no_unexplored_room_counter_ = 0;
+  if (viewpoint_manager_) {
+    viewpoint_manager_->SetCurrentRoomId(-1);
+    viewpoint_manager_->SetTransitAcrossRoom(false);
+    cv::Mat empty_mask = cv::Mat::zeros(room_voxel_dimension_.x(),
+                                        room_voxel_dimension_.y(), CV_32S);
+    viewpoint_manager_->SetRoomMask(empty_mask);
+  }
+  if (grid_world_) {
+    grid_world_->SetCurrentRoomId(-1);
+    cv::Mat empty_mask = cv::Mat::zeros(room_voxel_dimension_.x(),
+                                        room_voxel_dimension_.y(), CV_32S);
+    grid_world_->SetRoomMask(empty_mask);
+  }
+  if (local_coverage_planner_) {
+    local_coverage_planner_->SetTransitAcrossRoom(false);
+  }
+  ROS_INFO("Cleared upper-floor room segmentation state (open TARE exploration)");
+}
+
 void SensorCoveragePlanner3D::InitPhase6()
 {
+  if (!kRoomSegmentation2FEnable) {
+    ClearUpperFloorRoomState();
+  }
   exploringPhase_ = 6;
   enter_wrong_room_ = false;
   viewpoint_manager_->SetEnterWrongRoom(false);
   local_coverage_planner_->SetEnterWrongRoom(false);
 
+  if (!kRoomSegmentation2FEnable) {
+    current_room_id_ = -1;
+    robot_position_old_ = robot_position_;
+    viewpoint_manager_->SetCurrentRoomId(-1);
+    grid_world_->SetCurrentRoomId(-1);
+    ROS_INFO("exploringPhase -> 6, starting 2F open TARE exploration (no room segmentation)");
+  } else {
   Eigen::Vector3f robot_position_tmp(
       robot_position_.x, robot_position_.y, robot_position_.z);
   Eigen::Vector3i robot_position_voxel = misc_utils_ns::point_to_voxel(
@@ -2464,6 +2581,7 @@ void SensorCoveragePlanner3D::InitPhase6()
   room_mask_old_ = room_mask_.clone();
   viewpoint_manager_->SetCurrentRoomId(current_room_id_);
   grid_world_->SetCurrentRoomId(current_room_id_);
+  }
   if (!kPhase6Enable) {
     if (kPhase7Enable) {
       ROS_INFO("Phase6 disabled, skipping to Phase7");
@@ -2511,6 +2629,9 @@ void SensorCoveragePlanner3D::InitPhase7()
 void SensorCoveragePlanner3D::InitPhase8()
 {
   ResetRoomSegmentationCache();
+  if (!kRoomSegmentation3FEnable) {
+    ClearUpperFloorRoomState();
+  }
   exploringPhase_ = 8;
   PublishExploringPhase();
   phase8_arrived_ = false;
@@ -2524,11 +2645,21 @@ void SensorCoveragePlanner3D::InitPhase8()
 
 void SensorCoveragePlanner3D::InitPhase9()
 {
+  if (!kRoomSegmentation3FEnable) {
+    ClearUpperFloorRoomState();
+  }
   exploringPhase_ = 9;
   enter_wrong_room_ = false;
   viewpoint_manager_->SetEnterWrongRoom(false);
   local_coverage_planner_->SetEnterWrongRoom(false);
 
+  if (!kRoomSegmentation3FEnable) {
+    current_room_id_ = -1;
+    robot_position_old_ = robot_position_;
+    viewpoint_manager_->SetCurrentRoomId(-1);
+    grid_world_->SetCurrentRoomId(-1);
+    ROS_INFO("exploringPhase -> 9, starting 3F open TARE exploration (no room segmentation)");
+  } else {
   Eigen::Vector3f robot_position_tmp(
       robot_position_.x, robot_position_.y, robot_position_.z);
   Eigen::Vector3i robot_position_voxel = misc_utils_ns::point_to_voxel(
@@ -2561,6 +2692,7 @@ void SensorCoveragePlanner3D::InitPhase9()
   room_mask_old_ = room_mask_.clone();
   viewpoint_manager_->SetCurrentRoomId(current_room_id_);
   grid_world_->SetCurrentRoomId(current_room_id_);
+  }
   if (!kPhase9Enable) {
     ROS_INFO("Phase9 disabled, marking exploration as finished.");
     exploration_finished_ = true;
@@ -3921,26 +4053,26 @@ void SensorCoveragePlanner3D::PublishWaypoint() {
     waypoint.point.y = initial_position_.y();
     waypoint.point.z = initial_position_.z();
   }
-  else if (near_room_1_ && !near_room_2_ && transit_across_room_)
+  else if (UsesRoomBasedExploration() && near_room_1_ && !near_room_2_ && transit_across_room_)
   {
     // If the robot is near the room, go to the door position
     waypoint.point.x = door_position_.x();
     waypoint.point.y = door_position_.y();
     waypoint.point.z = robot_position_.z;
   }
-  else if (near_room_2_ && transit_across_room_)
+  else if (UsesRoomBasedExploration() && near_room_2_ && transit_across_room_)
   {
     // If the robot is very near the room, go to the lookahead point
     SendInRoomWaypoint();
     return;
   }
-  else if (transit_across_room_ && door_position_.x() > -9999.0 && !near_room_2_)
+  else if (UsesRoomBasedExploration() && transit_across_room_ && door_position_.x() > -9999.0 && !near_room_2_)
   {
     waypoint.point.x = door_position_.x();
     waypoint.point.y = door_position_.y();
     waypoint.point.z = robot_position_.z;
   }
-  else if ((false || false || ask_found_object_) && !transit_across_room_)
+  else if (UsesRoomBasedExploration() && (false || false || ask_found_object_) && !transit_across_room_)
   {
     if (false)
     {
@@ -4117,6 +4249,20 @@ void SensorCoveragePlanner3D::CountDirectionChange() {
   std_msgs::Int32 momentum_activation_count_msg;
   momentum_activation_count_msg.data = momentum_activation_count_;
   momentum_activation_count_pub_.publish(momentum_activation_count_msg);
+}
+
+void SensorCoveragePlanner3D::LogExplorationStatus() const {
+  if (!kVerboseExplorationStatus || !IsRoomExplorationPhase()) {
+    return;
+  }
+  ROS_INFO_THROTTLE(
+      kVerboseExplorationStatusInterval,
+      "TARE explore | phase=%d pos=(%.2f,%.2f,%.2f) finished=%d open=%d "
+      "room_id=%d frontier=%d uncovered=%d local_done=%d vp=%d no_room_cnt=%d runtime=%.0fms",
+      exploringPhase_, robot_position_.x, robot_position_.y, robot_position_.z,
+      exploration_finished_, IsOpenExplorationPhase(), current_room_id_,
+      last_status_frontier_, last_status_uncovered_, last_status_local_complete_,
+      last_status_vp_count_, no_unexplored_room_counter_, overall_runtime_);
 }
 
 void SensorCoveragePlanner3D::execute() {
@@ -4351,8 +4497,10 @@ void SensorCoveragePlanner3D::execute() {
     ProcessObjectNodes();
     if (keypose_cloud_update_) {
       keypose_cloud_update_ = false;
-      UpdateRoomLabel();
-      SetCurrentRoomId();
+      if (UsesRoomSegmentation()) {
+        UpdateRoomLabel();
+        SetCurrentRoomId();
+      }
       UpdateGlobalRepresentation();
       UpdateViewPoints();
       UpdateKeyposeGraph();
@@ -4484,8 +4632,10 @@ void SensorCoveragePlanner3D::execute() {
     ProcessObjectNodes();
     if (keypose_cloud_update_) {
       keypose_cloud_update_ = false;
-      UpdateRoomLabel();
-      SetCurrentRoomId();
+      if (UsesRoomSegmentation()) {
+        UpdateRoomLabel();
+        SetCurrentRoomId();
+      }
       UpdateGlobalRepresentation();
       UpdateViewPoints();
       UpdateKeyposeGraph();
@@ -4525,13 +4675,15 @@ void SensorCoveragePlanner3D::execute() {
   overall_processing_timer.Start();
   if (keypose_cloud_update_) {
     keypose_cloud_update_ = false;
-    UpdateRoomLabel();
-    SetCurrentRoomId();
+    if (UsesRoomBasedExploration()) {
+      UpdateRoomLabel();
+      SetCurrentRoomId();
+    }
 
     // const bool room_transit_canceled = MarkDepartingRoomUnfinishedIfNeeded();
 
     // -------- Transit across rooms --------
-    if (transit_across_room_ && !at_room_)
+    if (UsesRoomBasedExploration() && transit_across_room_ && !at_room_)
     {
       geometry_msgs::PointStamped::Ptr geomsg(
           new geometry_msgs::PointStamped());
@@ -4543,7 +4695,7 @@ void SensorCoveragePlanner3D::execute() {
       GoalPointCallback(geomsg);
       SetStartAndEndRoomId();
     }
-    if (at_room_)
+    if (UsesRoomBasedExploration() && at_room_)
     {
       room_guide_counter_++;
       reset_waypoint_ = true;
@@ -4587,7 +4739,9 @@ void SensorCoveragePlanner3D::execute() {
       return;
     }
 
-    CheckDoorCloudInRange();
+    if (UsesRoomBasedExploration()) {
+      CheckDoorCloudInRange();
+    }
     UpdateKeyposeGraph();
 
     int uncovered_point_num = 0;
@@ -4612,6 +4766,12 @@ void SensorCoveragePlanner3D::execute() {
     exploration_path_ns::ExplorationPath local_path;
     LocalPlanning(uncovered_point_num, uncovered_frontier_point_num,
                   global_path, local_path);
+
+    last_status_frontier_ = uncovered_frontier_point_num;
+    last_status_uncovered_ = uncovered_point_num;
+    last_status_vp_count_ = viewpoint_candidate_count;
+    last_status_local_complete_ =
+        local_coverage_planner_->IsLocalCoverageComplete();
 
     near_home_ = GetRobotToHomeDistance() < kRushHomeDist;
     at_home_ = GetRobotToHomeDistance() < kAtHomeDistThreshold;
@@ -4642,7 +4802,7 @@ void SensorCoveragePlanner3D::execute() {
     //   }
     // }
 
-    if (current_room_id_ != -1)
+    if (UsesRoomBasedExploration() && current_room_id_ != -1)
     {
       if (!representation_->HasRoomNode(current_room_id_)) {
         ROS_WARN("Current room with id %d does not exist in representation, reset to -1", current_room_id_);
@@ -4666,8 +4826,30 @@ void SensorCoveragePlanner3D::execute() {
       }
     }
 
+    if (IsOpenExplorationPhase()) {
+      if (local_coverage_planner_->IsLocalCoverageComplete() &&
+          uncovered_frontier_point_num == 0) {
+        no_unexplored_room_counter_++;
+        if (exploringPhase_ == 6 &&
+            no_unexplored_room_counter_ >= kPhase7NoRoomCycles) {
+          InitPhase7();
+        } else if (exploringPhase_ == 9 &&
+                   no_unexplored_room_counter_ >= kPhase7NoRoomCycles) {
+          exploration_finished_ = true;
+        }
+      } else {
+        no_unexplored_room_counter_ = 0;
+      }
+    }
+
     exploration_path_ = ConcatenateGlobalLocalPath(global_path, local_path);
-    GetToRoomState(at_room_, near_room_1_, near_room_2_);
+    if (UsesRoomBasedExploration()) {
+      GetToRoomState(at_room_, near_room_1_, near_room_2_);
+    } else {
+      at_room_ = false;
+      near_room_1_ = false;
+      near_room_2_ = false;
+    }
 
     PublishExplorationState();
 
@@ -4689,6 +4871,7 @@ void SensorCoveragePlanner3D::execute() {
     PublishRoomTypeVisualization();
     PublishObjectNodeMarkers();
     PublishRuntime();
+    LogExplorationStatus();
 
     stayed_in_room_counter_++;
   }
@@ -5729,6 +5912,9 @@ void SensorCoveragePlanner3D::GetAnswer()
     ROS_ERROR("Planner not initialized, cannot get answer");
     return;
   }
+  if (IsOpenExplorationPhase()) {
+    return;
+  }
   if (!has_candidate_room_position_) {
     if (!SelectNearestUnexploredRoom()) {
       if (kPhase4Enable && exploringPhase_ == 3) {
@@ -5736,7 +5922,7 @@ void SensorCoveragePlanner3D::GetAnswer()
         if (no_unexplored_room_counter_ >= kPhase4NoRoomCycles) {
           InitPhase4();
         }
-      } else if (kPhase7Enable && exploringPhase_ == 6) {
+      } else if (kPhase7Enable && exploringPhase_ == 6 && kRoomSegmentation2FEnable) {
         no_unexplored_room_counter_++;
         if (no_unexplored_room_counter_ >= kPhase7NoRoomCycles) {
           InitPhase7();

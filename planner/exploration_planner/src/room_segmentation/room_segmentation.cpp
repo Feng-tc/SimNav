@@ -39,7 +39,10 @@ RoomSegmentationNode::RoomSegmentationNode(ros::NodeHandle& nh, ros::NodeHandle&
       segment_flag_(false),
       exploring_phase_(1),
       demo_frozen_(false),
-      demo_publish_count_(0)
+      demo_publish_count_(0),
+      kRoomSegmentation1FEnable_(true),
+      kRoomSegmentation2FEnable_(false),
+      kRoomSegmentation3FEnable_(false)
 {
     ROS_INFO("Initializing Room Segmentation Node...");
 
@@ -88,6 +91,17 @@ RoomSegmentationNode::RoomSegmentationNode(ros::NodeHandle& nh, ros::NodeHandle&
     pnh_.param("kViewPointCollisionMarginZPlus", kViewPointCollisionMarginZPlus_, kViewPointCollisionMarginZPlus_);
     pnh_.param("kViewPointCollisionMarginZMinus", kViewPointCollisionMarginZMinus_, kViewPointCollisionMarginZMinus_);
     pnh_.param("isDebug", is_debug_, is_debug_);
+    pnh_.param("kRoomSegmentation1FEnable", kRoomSegmentation1FEnable_, true);
+    pnh_.param("kRoomSegmentation2FEnable", kRoomSegmentation2FEnable_, false);
+    pnh_.param("kRoomSegmentation3FEnable", kRoomSegmentation3FEnable_, false);
+    if (pnh_.hasParam("kRoomSegmentation1FOnly") &&
+        !pnh_.hasParam("kRoomSegmentation1FEnable")) {
+        bool legacy_1f_only = true;
+        pnh_.param("kRoomSegmentation1FOnly", legacy_1f_only, true);
+        kRoomSegmentation1FEnable_ = legacy_1f_only;
+        kRoomSegmentation2FEnable_ = !legacy_1f_only;
+        kRoomSegmentation3FEnable_ = !legacy_1f_only;
+    }
 
     room_resolution_inv_ = 1.0f / room_resolution_;
     ceiling_height_ = ceiling_height_base_;
@@ -205,9 +219,25 @@ void RoomSegmentationNode::resetCallback(const std_msgs::Bool::ConstPtr& /*msg*/
     ROS_INFO("room_segmentation: cache reset for new floor.");
 }
 
+bool RoomSegmentationNode::shouldProcessSegmentation() const {
+    switch (exploring_phase_) {
+        case 2:
+        case 3:
+            return kRoomSegmentation1FEnable_;
+        case 5:
+        case 6:
+            return kRoomSegmentation2FEnable_;
+        case 8:
+        case 9:
+            return kRoomSegmentation3FEnable_;
+        default:
+            return false;
+    }
+}
+
 // ==================== Timer Callback ====================
 void RoomSegmentationNode::timerCallback(const ros::TimerEvent& /*event*/) {
-    if (exploring_phase_ == 1 || exploring_phase_ == 4 || exploring_phase_ == 7) {
+    if (!shouldProcessSegmentation()) {
         return;
     }
     if (demo_frozen_) {
@@ -358,7 +388,7 @@ void RoomSegmentationNode::keyboardInputCallback(const std_msgs::String::ConstPt
 
 // ==================== Callback Functions ====================
 void RoomSegmentationNode::laserCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
-    if (exploring_phase_ == 1 || exploring_phase_ == 4 || exploring_phase_ == 7) {
+    if (!shouldProcessSegmentation()) {
         return;
     }
     if (demo_frozen_) {
@@ -501,7 +531,7 @@ void RoomSegmentationNode::laserCloudCallback(const sensor_msgs::PointCloud2::Co
 }
 
 void RoomSegmentationNode::occupiedCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {
-    if (exploring_phase_ == 1 || exploring_phase_ == 4 || exploring_phase_ == 7) {
+    if (!shouldProcessSegmentation()) {
         return;
     }
     if (demo_frozen_) {
@@ -1039,9 +1069,14 @@ void RoomSegmentationNode::updateStateVoxel() {
                     if (nx >= 0 && nx < room_voxel_dimension_[0] &&
                         ny >= 0 && ny < room_voxel_dimension_[1])
                     {
+                        // Keep cells with wall evidence unlocked so wall_hist can
+                        // keep accumulating and rooms are not erased after a turn.
+                        if (wall_hist_all_.at<float>(nx, ny) > 0.0f)
+                        {
+                            continue;
+                        }
                         state_map_all_.at<uchar>(nx, ny) = 1; // Mark as free space
                         navigable_map_all_.at<float>(nx, ny) = 1.0f;
-                        wall_hist_all_.at<float>(nx, ny) = 1.0f; // Clear wall history
                         
                         for (int z = 0; z < room_voxel_dimension_[2]; ++z)
                         {
@@ -1078,7 +1113,7 @@ void RoomSegmentationNode::updateStateVoxel() {
 
 void RoomSegmentationNode::updateFreespace(pcl::PointCloud<pcl::PointXYZI>::Ptr &freespace_cloud_tmp)
 {
-    // this function only updates the navigable_voxels_, navigable_map_all_, wall_hist_all_ based on the freespace_cloud_
+    // this function only updates the navigable_voxels_ and navigable_map_all_ based on the freespace_cloud_
     // this function will store the freespace voxel indices in freespace_indices_, and it is used in updateStateVoxel() to update the state_map_all_
     freespace_indices_.clear();
     for (auto &pt : freespace_cloud_->points)
@@ -1117,9 +1152,6 @@ void RoomSegmentationNode::updateFreespace(pcl::PointCloud<pcl::PointXYZI>::Ptr 
                             {
                                 navigable_voxels_[toIndex(nx, ny, nz)] = 0;
                                 navigable_map_all_.at<float>(nx, ny) -= 1.0f;
-                                float pt_z = pt.z + dz * room_resolution_; // 计算实际的z坐标
-                                if (wall_thres_height_ < pt_z && pt_z < ceiling_height_)
-                                    wall_hist_all_.at<float>(nx, ny) -= 1.0f; // 更新墙体地图
                             }
                         }
                     }
