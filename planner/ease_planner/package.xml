@@ -14,6 +14,8 @@
   <build_depend>geometry_msgs</build_depend>
   <build_depend>visualization_msgs</build_depend>
   <build_depend>building_generator_interfaces</build_depend>
+  <build_depend>roslib</build_depend>
+  <build_depend>yaml-cpp</build_depend>
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>std_msgs</exec_depend>
@@ -21,5 +23,7 @@
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>visualization_msgs</exec_depend>
   <exec_depend>building_generator_interfaces</exec_depend>
+  <exec_depend>roslib</exec_depend>
+  <exec_depend>yaml-cpp</exec_depend>
   <exec_depend>rviz</exec_depend>
 </package>

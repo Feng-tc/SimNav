@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include <ros/package.h>
+
 namespace ease_planner_ns {
 
 EasePlanner::EasePlanner(ros::NodeHandle& nh, ros::NodeHandle& private_nh)
@@ -54,9 +56,7 @@ void EasePlanner::ReadParameters() {
   }
 
   LoadPointParam(private_nh_, "kPhase1Waypoint", &phase1_waypoint_, 0.0, 2.5, 0.6);
-  LoadWaypointList(private_nh_, "kFloor1Waypoints", &floor_waypoints_[0]);
-  LoadWaypointList(private_nh_, "kFloor2Waypoints", &floor_waypoints_[1]);
-  LoadWaypointList(private_nh_, "kFloor3Waypoints", &floor_waypoints_[2]);
+  LoadFloorWaypoints(private_nh_);
 
   LoadPointParam(private_nh_, "kElevator1_1Waypoint", &elevator_trips_[0].outside,
                  0.0, 2.5, 0.6);
@@ -76,9 +76,52 @@ void EasePlanner::ReadParameters() {
   private_nh_.param("kElevator2TargetFloor", elevator_trips_[1].call_to_floor, 2);
   private_nh_.param("kElevator2WaitFloor", elevator_trips_[1].wait_at_floor, 1);
 
-  ROS_INFO("ease_planner waypoints: 1F=%zu 2F=%zu 3F=%zu",
-           floor_waypoints_[0].size(), floor_waypoints_[1].size(),
-           floor_waypoints_[2].size());
+  ROS_INFO("ease_planner profile '%s': 1F=%zu 2F=%zu 3F=%zu",
+           waypoint_profile_.c_str(), floor_waypoints_[0].size(),
+           floor_waypoints_[1].size(), floor_waypoints_[2].size());
+}
+
+void EasePlanner::LoadWaypointListFromYaml(
+    const YAML::Node& node, std::vector<geometry_msgs::Point>* out) {
+  out->clear();
+  if (!node || !node.IsSequence()) {
+    return;
+  }
+  for (const auto& item : node) {
+    if (!item.IsSequence() || item.size() < 3) {
+      continue;
+    }
+    geometry_msgs::Point point;
+    point.x = item[0].as<double>();
+    point.y = item[1].as<double>();
+    point.z = item[2].as<double>();
+    out->push_back(point);
+  }
+}
+
+void EasePlanner::LoadFloorWaypoints(const ros::NodeHandle& nh) {
+  nh.param("kWaypointProfile", waypoint_profile_, std::string("full_tour"));
+
+  const std::string profile_path = ros::package::getPath("ease_planner") +
+                                   "/config/profiles/" + waypoint_profile_ +
+                                   ".yaml";
+  try {
+    const YAML::Node root = YAML::LoadFile(profile_path);
+    LoadWaypointListFromYaml(root["kFloor1Waypoints"], &floor_waypoints_[0]);
+    LoadWaypointListFromYaml(root["kFloor2Waypoints"], &floor_waypoints_[1]);
+    LoadWaypointListFromYaml(root["kFloor3Waypoints"], &floor_waypoints_[2]);
+    ROS_INFO("Loaded waypoint profile '%s' from %s", waypoint_profile_.c_str(),
+             profile_path.c_str());
+    return;
+  } catch (const YAML::Exception& e) {
+    ROS_ERROR("Failed to load waypoint profile '%s' from %s: %s",
+              waypoint_profile_.c_str(), profile_path.c_str(), e.what());
+  }
+
+  ROS_WARN("Falling back to kFloor*Waypoints from parameter server");
+  LoadWaypointList(nh, "kFloor1Waypoints", &floor_waypoints_[0]);
+  LoadWaypointList(nh, "kFloor2Waypoints", &floor_waypoints_[1]);
+  LoadWaypointList(nh, "kFloor3Waypoints", &floor_waypoints_[2]);
 }
 
 double EasePlanner::XmlRpcToDouble(const XmlRpc::XmlRpcValue& value) {

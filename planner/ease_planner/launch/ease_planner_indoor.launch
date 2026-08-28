@@ -1,10 +1,14 @@
 <launch>
   <arg name="scenario" default="indoor" />
+  <arg name="waypoint_profile" default=""
+       doc="Optional override of kWaypointProfile in scenario yaml" />
   <arg name="rviz" default="true" />
   <arg name="state_estimation_topic" default="/Odometry_gazebo" />
 
   <node pkg="ease_planner" type="ease_planner_node" name="ease_planner_node" output="screen">
     <rosparam file="$(find ease_planner)/config/$(arg scenario).yaml" command="load" />
+    <param if="$(eval arg('waypoint_profile') != '')" name="kWaypointProfile" type="str"
+           value="$(arg waypoint_profile)" />
     <remap from="/Odometry_gazebo" to="$(arg state_estimation_topic)" />
   </node>
 

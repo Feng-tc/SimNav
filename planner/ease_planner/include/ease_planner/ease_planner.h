@@ -12,6 +12,7 @@
 #include <std_msgs/Int32.h>
 #include <visualization_msgs/MarkerArray.h>
 #include <xmlrpcpp/XmlRpcValue.h>
+#include <yaml-cpp/yaml.h>
 
 #include <building_generator_interfaces/CallElevator.h>
 #include <building_generator_interfaces/SetDoorState.h>
@@ -69,6 +70,9 @@ class EasePlanner {
                              geometry_msgs::Point* point, double dx, double dy, double dz);
   static void LoadWaypointList(const ros::NodeHandle& nh, const std::string& key,
                                std::vector<geometry_msgs::Point>* out);
+  static void LoadWaypointListFromYaml(const YAML::Node& node,
+                                       std::vector<geometry_msgs::Point>* out);
+  void LoadFloorWaypoints(const ros::NodeHandle& nh);
 
   ros::NodeHandle nh_;
   ros::NodeHandle private_nh_;
@@ -86,6 +90,7 @@ class EasePlanner {
   std::string kMainEntranceDoorId_ = "main_entrance";
   std::string kElevatorId_ = "elevator_main";
   int kElevatorServedFloorCount_ = 3;
+  std::string waypoint_profile_;
 
   geometry_msgs::Point phase1_waypoint_;
   std::vector<geometry_msgs::Point> floor_waypoints_[3];
