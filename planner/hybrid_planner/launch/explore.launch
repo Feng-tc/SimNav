@@ -1,0 +1,6 @@
+<launch>
+  <arg name="scenario" default="indoor" />
+  <node pkg="hybrid_planner" type="hybrid_planner_node" name="hybrid_planner_node" output="screen">
+    <rosparam file="$(find hybrid_planner)/config/$(arg scenario).yaml" command="load" />
+  </node>
+</launch>

@@ -16,6 +16,8 @@
 
 ---
 
+
+
 ## 1. 宿主机
 
 ```bash
@@ -52,25 +54,34 @@ sudo docker run -it \
 
 ---
 
+
+
 ## 2. 容器内 — 环境变量
 
 每次进入容器后执行：
 
 ```bash
+# LibTorch 和 CUDA
+export LIBTORCH_PATH=/libtorch
 export LD_LIBRARY_PATH=/libtorch/lib:/usr/local/cuda-11.8/lib64:/var/lib/snapd/hostfs/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
+# CUDA 11.8（确保 CMake 找到正确版本）
 export CUDA_HOME=/usr/local/cuda-11.8
+export CUDA_TOOLKIT_ROOT_DIR=/usr/local/cuda-11.8
 export PATH=/usr/local/cuda-11.8/bin:$PATH
+# GPU 相关
 export __GLX_VENDOR_LIBRARY_NAME=nvidia
 export __NV_PRIME_RENDER_OFFLOAD=1
 export LIBGL_DRI3_DISABLE=1
 export QT_X11_NO_MITSHM=1
+# ROS
 export GAZEBO_PLUGIN_PATH=/opt/ros/noetic/lib
-
 source /opt/ros/noetic/setup.bash
 source /workspace/devel/setup.bash
 ```
 
 ---
+
+
 
 ## 3. 新建容器时 — 安装依赖
 
@@ -85,6 +96,8 @@ apt install -y \
   wget
 ```
 
+
+
 ### 3.1 junior_ctrl RL — LibTorch GPU 与 CUDA 11.8
 
 `junior_ctrl` 的 RL 策略默认在检测到 CUDA 时使用 GPU（见 `State_RL_test.cpp`）。需满足：
@@ -92,6 +105,8 @@ apt install -y \
 1. **LibTorch 必须是 CUDA 版**（文件名含 `cu118`，非 `cpu`）
 2. **容器内安装 CUDA Toolkit 11.8**（编译用；运行时主要用 libtorch 自带库）
 3. 换 libtorch 后 **重启容器**（bind mount 绑的是 inode，运行中 `mv` 替换目录不会自动更新）
+
+
 
 #### 宿主机 — 下载并放置 LibTorch
 
@@ -111,6 +126,8 @@ ls libtorch/lib/libtorch_cuda.so  # 必须存在
 sudo docker stop simenv && sudo docker start simenv
 ```
 
+
+
 #### 容器内 — 安装 CUDA Toolkit 11.8（一次性）
 
 ```bash
@@ -124,6 +141,8 @@ ln -sf /usr/local/cuda-11.8 /usr/local/cuda
 
 > 勿用 `apt install nvidia-cuda-toolkit`（Ubuntu 源为 CUDA 10.1，不满足 libtorch cu118 要求）。
 
+
+
 #### 验证 libtorch 与链接
 
 ```bash
@@ -135,13 +154,15 @@ ldd /workspace/devel/lib/unitree_guide/junior_ctrl | grep -E 'torch_cuda|c10_cud
 
 ---
 
+
+
 ## 4. Planner 接入与编译
 
 planner 源码在 `planner/`，用**相对路径**链入 `src/`：
 
 ```bash
 cd /workspace/src
-for d in exploration_planner ease_planner local_planner terrain_analysis terrain_analysis_ext \
+for d in exploration_planner ease_planner hybrid_planner local_planner terrain_analysis terrain_analysis_ext \
          sensor_scan_generation semantic_mapping waypoint_rviz_plugin; do
   rm -f "$d"
   ln -sf "../planner/$d" "$d"
@@ -152,30 +173,35 @@ done
 
 ```bash
 cd /workspace
-catkin_make --force-cmake -j2 -DLIBTORCH_PATH=/libtorch
-source /workspace/devel/setup.bash
+rm -rf build devel
+catkin_make -j2 -DLIBTORCH_PATH=/libtorch
+source devel/setup.bash
 ```
 
 ---
+
+
 
 ## 5. 启动仿真 + Planner
 
 默认采用 **Gazebo 无 GUI + RViz 观测** 方案：Gazebo 只跑后端仿真，可视化交给终端 3 的 RViz（TARE 或 ease）。以下默认值已写入对应文件，无需每次指定：
 
 
-| 默认值来源                        | 修改内容                                                   |
-| ---------------------------- | ------------------------------------------------------ |
-| `auto.sh`                    | `GUI=false`、`ENABLE_SENSOR_DATA=0`、`ENABLE_LIVOX=true` |
-| `system_indoor_base.launch`  | `rviz` 默认 `false`（避免双 RViz）                            |
-| `tare_planner_indoor.launch` / `ease_planner_indoor.launch` | `rviz` 默认 `true`（唯一 RViz 窗口） |
+| 默认值来源                                                                                        | 修改内容                                                   |
+| -------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `auto.sh`                                                                                    | `GUI=false`、`ENABLE_SENSOR_DATA=0`、`ENABLE_LIVOX=true` |
+| `system_indoor_base.launch`                                                                  | `rviz` 默认 `false`（避免双 RViz）                            |
+| `tare_planner_indoor.launch` / `ease_planner_indoor.launch` / `hybrid_planner_indoor.launch` | `rviz` 默认 `true`（唯一 RViz 窗口）                           |
 
 
 
-| 终端  | 作用                             |
-| --- | ------------------------------ |
-| 1   | 仿真 + 控制器（`auto.sh`）            |
-| 2   | 局部规划，不开 RViz（`local_planner`）  |
-| 3   | 探索规划 + RViz（`tare_planner` 或 `ease_planner`，二选一） |
+| 终端  | 作用                                                                |
+| --- | ----------------------------------------------------------------- |
+| 1   | 仿真 + 控制器（`auto.sh`）                                               |
+| 2   | 局部规划，不开 RViz（`local_planner`）                                     |
+| 3   | 探索规划 + RViz（`tare_planner`、`ease_planner` 或 `hybrid_planner`，三选一） |
+
+
 
 
 ### 终端 1 — 仿真
@@ -200,29 +226,46 @@ roslaunch local_planner system_indoor_base.launch
 
 不启动 RViz，避免与终端 3 重复。如需单独调试局部规划，可加 `rviz:=true`。
 
-### 终端 3 — 探索规划（二选一）
+### 终端 3 — 探索规划（三选一）
 
 同一时间只启动其中一个。
 
-TARE 智能探索：
+**选项 1：TARE 智能探索**（全区域自主探索）
 
 ```bash
-pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner" 2>/dev/null || true
+pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner\|hybrid_planner" 2>/dev/null || true
 roslaunch tare_planner tare_planner_indoor.launch
 ```
 
 自动启动 RViz（`tare_planner_indoor.rviz`），显示探索子空间、frontier、全局路径、点云等。进门与控门由 TARE Phase1 自动处理。
 
-手动航点巡游（`ease_planner`，目标点写在 `planner/ease_planner/config/indoor.yaml`）：
+**选项 2：手动航点巡游**（`ease_planner`，目标点写在 `planner/ease_planner/config/indoor.yaml`）
 
 ```bash
-pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner" 2>/dev/null || true
+pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner\|hybrid_planner" 2>/dev/null || true
 roslaunch ease_planner ease_planner_indoor.launch
 ```
 
 自动启动 RViz（`ease_planner_indoor.rviz`）。Phase1 进门逻辑与 TARE 相同，随后按配置航点逐层巡游并乘电梯上 2F/3F。
 
+**选项 3：混合模式**（`hybrid_planner`，航点导航 + 房间内 TARE 探索）
+
+```bash
+pkill -f "tare_planner\|sensor_coverage_planner\|ease_planner\|hybrid_planner" 2>/dev/null || true
+roslaunch hybrid_planner hybrid_planner_indoor.launch
+```
+
+自动启动 RViz（`hybrid_planner_indoor.rviz`）。**推荐用于室内多房间探索**：
+
+- 走廊：使用预定义航点快速通过
+- 房间：自动切换为 TARE 自主探索（边界约束）
+- 完成判断：frontier < 阈值 或 超时后自动切换到下一房间
+- 配置文件：`planner/hybrid_planner/config/indoor.yaml`（定义房间入口、边界框、阈值等）
+- 详细文档：`planner/hybrid_planner/README.md`
+
 ---
+
+
 
 ## 6. Rosbag 录制（RealSense RGB + 深度 + 位姿）
 

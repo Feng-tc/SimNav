@@ -1,0 +1,27 @@
+<launch>
+  <arg name="scenario" default="indoor" />
+  <arg name="room_tasks_config" default="$(find hybrid_planner)/config/room_tasks.yaml" />
+  <arg name="rviz" default="true" />
+  <arg name="registered_scan_topic" default="/livox/Pointcloud2" />
+  <arg name="state_estimation_topic" default="/Odometry_gazebo" />
+
+  <!-- TARE configured-room planner -->
+  <node pkg="hybrid_planner" type="hybrid_planner_node" name="hybrid_planner_node" output="screen">
+    <rosparam file="$(find hybrid_planner)/config/$(arg scenario).yaml" command="load" />
+    <rosparam file="$(arg room_tasks_config)" command="load" />
+    <!-- Expose private planning and visualizer topics globally for RViz -->
+    <remap from="occupied_cloud" to="/occupied_cloud" />
+    <remap from="planner_cloud" to="/planner_cloud" />
+    <remap from="uncovered_cloud" to="/uncovered_cloud" />
+    <remap from="uncovered_frontier_cloud" to="/uncovered_frontier_cloud" />
+    <remap from="rolling_occupancy_grid_cloud" to="/rolling_occupancy_grid_cloud" />
+    <remap from="tare_visualizer/exploring_subspaces" to="/tare_visualizer/exploring_subspaces" />
+    <remap from="tare_visualizer/local_planning_horizon" to="/tare_visualizer/local_planning_horizon" />
+    <remap from="tare_visualizer/local_path" to="/tare_visualizer/local_path" />
+    <remap from="tare_visualizer/viewpoints" to="/tare_visualizer/viewpoints" />
+    <remap from="tare_visualizer/uncovered_surface_points" to="/tare_visualizer/uncovered_surface_points" />
+  </node>
+
+  <node if="$(arg rviz)" pkg="rviz" type="rviz" name="hybrid_planner_rviz"
+        args="-d $(find hybrid_planner)/rviz/hybrid_planner_indoor.rviz" output="screen" />
+</launch>
