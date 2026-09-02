@@ -29,17 +29,17 @@ kMapClearingDist: 8.0  # /map_clearing radius on Phase1 first waypoint (match te
 kUsePhase1Door: true
 kMainEntranceDoorId: "main_entrance"
 kRoomSegmentation1FEnable: true   # Phase 2/3: room segmentation on 1F
-kRoomSegmentation2FEnable: false  # Phase 5/6: false → open TARE exploration on 2F
-kRoomSegmentation3FEnable: false  # Phase 8/9: false → open TARE exploration on 3F
+kRoomSegmentation2FEnable: true  # Phase 5/6: false → open TARE exploration on 2F
+kRoomSegmentation3FEnable: true  # Phase 8/9: false → open TARE exploration on 3F
 
 kPhase1Enable: true
-kPhase2Enable: false
-kPhase3Enable: false
+kPhase2Enable: true
+kPhase3Enable: true
 kPhase4Enable: true
-kPhase5Enable: false
+kPhase5Enable: true
 kPhase6Enable: true
 kPhase7Enable: true
-kPhase8Enable: false
+kPhase8Enable: true
 kPhase9Enable: true
 
 kPhase1Waypoint: [0.0, 2.5, 0.6]
