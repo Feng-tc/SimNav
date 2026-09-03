@@ -33,11 +33,11 @@ kRoomSegmentation2FEnable: true  # Phase 5/6: false → open TARE exploration on
 kRoomSegmentation3FEnable: true  # Phase 8/9: false → open TARE exploration on 3F
 
 kPhase1Enable: true
-kPhase2Enable: true
-kPhase3Enable: true
+kPhase2Enable: false
+kPhase3Enable: false
 kPhase4Enable: true
-kPhase5Enable: true
-kPhase6Enable: true
+kPhase5Enable: false
+kPhase6Enable: false
 kPhase7Enable: true
 kPhase8Enable: true
 kPhase9Enable: true
