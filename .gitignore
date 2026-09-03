@@ -2,8 +2,8 @@
 build/
 devel/
 
-# 运行时生成
-logs/
+# 运行时生成（仅仓库根目录；unitree_guide 策略模型在 src/unitree_guide/logs/）
+/logs/
 generated_building/
 results/
 bags/
