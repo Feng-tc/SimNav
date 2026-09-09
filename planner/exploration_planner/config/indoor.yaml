@@ -33,11 +33,11 @@ kRoomSegmentation2FEnable: true  # Phase 5/6: false → open TARE exploration on
 kRoomSegmentation3FEnable: true  # Phase 8/9: false → open TARE exploration on 3F
 
 kPhase1Enable: true
-kPhase2Enable: false
-kPhase3Enable: false
+kPhase2Enable: true
+kPhase3Enable: true
 kPhase4Enable: true
-kPhase5Enable: false
-kPhase6Enable: false
+kPhase5Enable: true
+kPhase6Enable: true
 kPhase7Enable: true
 kPhase8Enable: true
 kPhase9Enable: true
@@ -84,6 +84,7 @@ kKeyposeCloudDwzFilterLeafSize: 0.2
 kRushHomeDist: 5.0
 kRushRoomDist_1: 4.0
 kRushRoomDist_2: 1.8
+kLobbyRoomMaxY: 7.9   # rooms with centroid.y below this are auto-marked as covered
 kAtHomeDistThreshold: 0.5
 kTerrainCollisionThreshold: 0.5
 kLookAheadDistance: 10.0

@@ -62,6 +62,7 @@ void SensorCoveragePlanner3D::ReadParameters() {
   private_nh_.param("kRushHomeDist", kRushHomeDist, 10.0);
   private_nh_.param("kRushRoomDist_1", kRushRoomDist_1, 4.0);
   private_nh_.param("kRushRoomDist_2", kRushRoomDist_2, 1.8);
+  private_nh_.param("kLobbyRoomMaxY", kLobbyRoomMaxY, 7.9);
   private_nh_.param("kAtHomeDistThreshold", kAtHomeDistThreshold, 0.5);
   private_nh_.param("kTerrainCollisionThreshold", kTerrainCollisionThreshold, 0.5);
   private_nh_.param("kLookAheadDistance", kLookAheadDistance, 5.0);
@@ -1129,6 +1130,8 @@ void SensorCoveragePlanner3D::RoomNodeListCallback(
       ++it;
     }
   }
+
+  AutoMarkLobbyRoomsCompleted();
 
   // check the anchor point of each room node, if the room is split into multiple parts, the anchor point may not be in the room
   for (auto &id_to_room_node : representation_->GetRoomNodesMapMutable())
@@ -4258,7 +4261,7 @@ void SensorCoveragePlanner3D::LogExplorationStatus() const {
   ROS_INFO_THROTTLE(
       kVerboseExplorationStatusInterval,
       "TARE explore | phase=%d pos=(%.2f,%.2f,%.2f) finished=%d open=%d "
-      "room_id=%d frontier=%d uncovered=%d local_done=%d vp=%d no_room_cnt=%d runtime=%.0fms",
+      "room_id=%d frontier=%d uncovered=%d local_done=%d vp=%d no_room_cnt=%d runtime=%dms",
       exploringPhase_, robot_position_.x, robot_position_.y, robot_position_.z,
       exploration_finished_, IsOpenExplorationPhase(), current_room_id_,
       last_status_frontier_, last_status_uncovered_, last_status_local_complete_,
@@ -4802,6 +4805,10 @@ void SensorCoveragePlanner3D::execute() {
     //   }
     // }
 
+    if (UsesRoomBasedExploration()) {
+      AutoMarkLobbyRoomsCompleted();
+    }
+
     if (UsesRoomBasedExploration() && current_room_id_ != -1)
     {
       if (!representation_->HasRoomNode(current_room_id_)) {
@@ -4819,8 +4826,9 @@ void SensorCoveragePlanner3D::execute() {
           GetAnswer();
         }
         else {
-          if (representation_->HasRoomNode(current_room_id_) && !transit_across_room_) {
-            representation_->GetRoomNode(current_room_id_).SetIsCovered(false);
+          if (representation_->HasRoomNode(current_room_id_) && !transit_across_room_ &&
+              !IsLobbyRegionRoom(current_room)) {
+            current_room.SetIsCovered(false);
           }
         }
       }
@@ -5867,6 +5875,27 @@ void SensorCoveragePlanner3D::CheckAnchorObjectFound()
   return;
 }
 
+bool SensorCoveragePlanner3D::IsLobbyRegionRoom(
+    const representation_ns::RoomNodeRep& room) const {
+  return room.centroid_.y() < kLobbyRoomMaxY;
+}
+
+void SensorCoveragePlanner3D::AutoMarkLobbyRoomsCompleted() {
+  for (auto& id_room_pair : representation_->GetRoomNodesMapMutable()) {
+    auto& room = id_room_pair.second;
+    if (!IsLobbyRegionRoom(room)) {
+      continue;
+    }
+    if (room.IsCovered()) {
+      continue;
+    }
+    room.SetIsCovered(true);
+    room.SetIsVisited(true);
+    ROS_INFO(
+        "Auto-marked lobby room %d as covered (centroid.y=%.2f < %.2f)",
+        room.id_, room.centroid_.y(), kLobbyRoomMaxY);
+  }
+}
 
 bool SensorCoveragePlanner3D::SelectNearestUnexploredRoom()
 {
@@ -5879,6 +5908,9 @@ bool SensorCoveragePlanner3D::SelectNearestUnexploredRoom()
       continue;
     }
     if (room.IsCovered()) {
+      continue;
+    }
+    if (IsLobbyRegionRoom(room)) {
       continue;
     }
     if (!room.is_connected_) {

@@ -166,6 +166,7 @@ private:
   std::string kPhase7ElevatorId;
   double kKeyposeCloudDwzFilterLeafSize;
   double kRushHomeDist;
+  double kLobbyRoomMaxY;
   double kAtHomeDistThreshold;
   double kTerrainCollisionThreshold;
   double kLookAheadDistance;
@@ -568,6 +569,8 @@ private:
   void ProcessObjectNodes();
   void CheckAnchorObjectFound();
 
+  bool IsLobbyRegionRoom(const representation_ns::RoomNodeRep& room) const;
+  void AutoMarkLobbyRoomsCompleted();
   bool SelectNearestUnexploredRoom();
   void GetAnswer();
   
